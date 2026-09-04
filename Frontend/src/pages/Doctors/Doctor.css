@@ -1,0 +1,17 @@
+/* Doctor module styles */
+
+.doctors-container {
+  display: grid;
+  grid-template-columns: 350px minmax(0, 1fr);
+  gap: 25px;
+}
+
+.doctor-list-card table {
+  min-width: 850px;
+}
+
+@media (max-width: 900px) {
+  .doctors-container {
+    grid-template-columns: 1fr;
+  }
+}

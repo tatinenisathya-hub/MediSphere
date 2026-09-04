@@ -1,0 +1,21 @@
+/* Prescription module styles */
+
+.prescriptions-container {
+  display: grid;
+  grid-template-columns: 350px minmax(0, 1fr);
+  gap: 25px;
+}
+
+.prescription-list-card table {
+  min-width: 1100px;
+}
+
+.prescription-list-card td:nth-child(6) {
+  min-width: 220px;
+}
+
+@media (max-width: 900px) {
+  .prescriptions-container {
+    grid-template-columns: 1fr;
+  }
+}

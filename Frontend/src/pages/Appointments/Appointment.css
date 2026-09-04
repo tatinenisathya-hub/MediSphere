@@ -1,0 +1,21 @@
+/* Appointment module styles */
+
+.appointments-container {
+  display: grid;
+  grid-template-columns: 350px minmax(0, 1fr);
+  gap: 25px;
+}
+
+.appointment-list-card table {
+  min-width: 1000px;
+}
+
+.appointment-list-card td:nth-child(6) {
+  min-width: 180px;
+}
+
+@media (max-width: 900px) {
+  .appointments-container {
+    grid-template-columns: 1fr;
+  }
+}

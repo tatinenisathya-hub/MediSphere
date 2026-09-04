@@ -1,0 +1,17 @@
+/* Patient module styles */
+
+.patients-container {
+  display: grid;
+  grid-template-columns: 350px minmax(0, 1fr);
+  gap: 25px;
+}
+
+.patient-page .patient-list-card table {
+  min-width: 850px;
+}
+
+@media (max-width: 900px) {
+  .patients-container {
+    grid-template-columns: 1fr;
+  }
+}

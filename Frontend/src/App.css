@@ -1,0 +1,555 @@
+/* =====================================
+   GLOBAL STYLES
+===================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f7fb;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+/* =====================================
+   MAIN APPLICATION
+===================================== */
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* =====================================
+   SIDEBAR
+===================================== */
+
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background-color: #1e3a5f;
+  color: white;
+  padding: 25px 15px;
+}
+
+.logo {
+  margin-bottom: 40px;
+  padding: 0 15px;
+}
+
+.logo h2 {
+  font-size: 28px;
+}
+
+.logo p {
+  font-size: 12px;
+  margin-top: 5px;
+  color: #cbd5e1;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar button {
+  border: none;
+  background: transparent;
+  color: white;
+  text-align: left;
+  padding: 14px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.sidebar button:hover {
+  background-color: #2d5280;
+}
+
+.sidebar button.active {
+  background-color: #3b82f6;
+}
+
+/* =====================================
+   MAIN CONTENT
+===================================== */
+
+.main-content {
+  flex: 1;
+  padding: 35px;
+  min-width: 0;
+}
+
+/* =====================================
+   HEADER
+===================================== */
+
+.header {
+  margin-bottom: 35px;
+}
+
+.header h1 {
+  font-size: 32px;
+  color: #1e293b;
+}
+
+.header p {
+  margin-top: 8px;
+  color: #64748b;
+}
+
+/* =====================================
+   DASHBOARD
+===================================== */
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.dashboard .card {
+  min-height: 180px;
+  padding: 25px;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  transition: 0.3s;
+}
+
+.dashboard .card:hover {
+  transform: translateY(-5px);
+}
+
+.card h3 {
+  color: #1e3a5f;
+  margin-bottom: 10px;
+  font-size: 22px;
+}
+
+.card p {
+  color: #64748b;
+}
+
+.clickable-card {
+  cursor: pointer;
+}
+
+.dashboard-count {
+  font-size: 42px;
+  font-weight: bold;
+  color: #2f66b3;
+  margin: 20px 0 10px;
+}
+
+/* =====================================
+   DASHBOARD SUMMARY
+===================================== */
+
+.dashboard-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.summary-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.summary-card h2 {
+  margin-bottom: 20px;
+  color: #263b57;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.summary-row strong {
+  color: #2f66b3;
+}
+
+.quick-action-button {
+  width: 100%;
+  padding: 13px;
+  margin-bottom: 12px;
+  border: none;
+  border-radius: 6px;
+  background: #4479c5;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.quick-action-button:hover {
+  background: #2f66b3;
+}
+
+/* =====================================
+   CRUD CONTAINER
+   PATIENTS / DOCTORS / APPOINTMENTS
+   / PRESCRIPTIONS
+===================================== */
+
+.patients-container {
+  display: grid;
+  grid-template-columns: 350px minmax(0, 1fr);
+  gap: 25px;
+}
+
+/* =====================================
+   FORM AND LIST CARDS
+===================================== */
+
+.patient-form-card,
+.patient-list-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.patient-form-card h2,
+.patient-list-card h2 {
+  color: #1e3a5f;
+  margin-bottom: 20px;
+}
+
+/* =====================================
+   FORM
+===================================== */
+
+.patient-form-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.patient-form-card input,
+.patient-form-card select,
+.patient-form-card textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: white;
+}
+
+.patient-form-card textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.patient-form-card input:focus,
+.patient-form-card select:focus,
+.patient-form-card textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+/* =====================================
+   MAIN BUTTONS
+===================================== */
+
+.add-button,
+.refresh-button {
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  background-color: #3b82f6;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.add-button:hover,
+.refresh-button:hover {
+  background-color: #2563eb;
+}
+
+.refresh-button {
+  padding: 8px 15px;
+}
+
+/* =====================================
+   CANCEL BUTTON
+===================================== */
+
+.cancel-button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: #64748b;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.cancel-button:hover {
+  background-color: #475569;
+}
+
+/* =====================================
+   LIST HEADER
+===================================== */
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+/* =====================================
+   TABLE CONTAINER
+===================================== */
+
+.table-container {
+  margin-top: 20px;
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+/* =====================================
+   TABLE
+===================================== */
+
+table {
+  width: 100%;
+  min-width: 850px;
+  border-collapse: collapse;
+}
+
+th {
+  background-color: #1e3a5f;
+  color: white;
+  white-space: nowrap;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+td {
+  color: #334155;
+}
+
+tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+/* =====================================
+   PRESCRIPTION TABLE
+===================================== */
+
+.table-container table {
+  min-width: 850px;
+}
+
+/* Long text such as prescription
+   instructions can wrap properly */
+
+td {
+  word-break: break-word;
+  max-width: 250px;
+}
+
+/* =====================================
+   NO DATA
+===================================== */
+
+.no-data {
+  margin-top: 20px;
+  color: #64748b;
+}
+
+/* =====================================
+   MESSAGE
+===================================== */
+
+.message {
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+/* =====================================
+   ACTION BUTTONS
+===================================== */
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.edit-button {
+  background-color: #f0ad4e;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.edit-button:hover {
+  background-color: #d98c20;
+}
+
+.delete-button {
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.delete-button:hover {
+  background-color: #b91c1c;
+}
+
+/* =====================================
+   RESPONSIVE DESIGN
+===================================== */
+
+@media (max-width: 1100px) {
+
+  .dashboard {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 900px) {
+
+  .app-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .sidebar nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .sidebar button {
+    flex: 1;
+    min-width: 130px;
+  }
+
+  .patients-container {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .main-content {
+    padding: 25px;
+  }
+
+}
+
+@media (max-width: 700px) {
+
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .main-content {
+    padding: 20px;
+  }
+
+  .header h1 {
+    font-size: 26px;
+  }
+
+  .patient-form-card,
+  .patient-list-card {
+    padding: 18px;
+  }
+
+  .list-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .refresh-button {
+    width: 100%;
+  }
+
+}
+
+@media (max-width: 500px) {
+
+  .sidebar {
+    padding: 20px 10px;
+  }
+
+  .sidebar nav {
+    flex-direction: column;
+  }
+
+  .sidebar button {
+    width: 100%;
+  }
+
+  .main-content {
+    padding: 15px;
+  }
+
+  .dashboard-count {
+    font-size: 36px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .edit-button,
+  .delete-button {
+    width: 100%;
+  }
+
+}

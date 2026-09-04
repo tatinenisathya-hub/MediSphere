@@ -1,0 +1,24 @@
+/* Laboratory module styles */
+
+.laboratory-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 25px;
+}
+
+.laboratory-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.laboratory-card h2 {
+  margin-bottom: 12px;
+  color: #1e3a5f;
+}
+
+.laboratory-card p {
+  color: #64748b;
+  line-height: 1.6;
+}

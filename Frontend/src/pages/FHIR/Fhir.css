@@ -1,0 +1,108 @@
+.fhir-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.fhir-tabs button {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 10px;
+  background: #e5e7eb;
+  color: #374151;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.fhir-tabs button:hover {
+  background: #d1d5db;
+}
+
+.fhir-tabs .active-tab {
+  background: #4779c7;
+  color: white;
+}
+
+.fhir-card {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.fhir-card h2 {
+  margin-top: 0;
+  color: #2d4059;
+}
+
+.fhir-card p {
+  color: #5b6470;
+  margin-bottom: 20px;
+}
+
+.fhir-input-section {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.fhir-input-section input {
+  flex: 1;
+  padding: 13px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.fhir-input-section button {
+  padding: 13px 25px;
+  background: #4779c7;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.fhir-input-section button:hover {
+  background: #3564ad;
+}
+
+.fhir-input-section button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.fhir-error {
+  padding: 15px;
+  background: #fee2e2;
+  color: #b91c1c;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.fhir-response-section h3 {
+  color: #2d4059;
+}
+
+.fhir-response-section pre {
+  background: #172033;
+  color: #e5e7eb;
+  padding: 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  min-height: 200px;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 768px) {
+  .fhir-input-section {
+    flex-direction: column;
+  }
+
+  .fhir-tabs {
+    flex-direction: column;
+  }
+}
