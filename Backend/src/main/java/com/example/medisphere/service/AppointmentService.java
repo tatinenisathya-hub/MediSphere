@@ -2,9 +2,6 @@ package com.example.medisphere.service;
 
 import com.example.medisphere.model.Appointment;
 import com.example.medisphere.repository.AppointmentRepository;
-import com.example.medisphere.repository.PatientRepository;
-import com.example.medisphere.repository.DoctorRepository;
-
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,42 +11,39 @@ import java.util.Optional;
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
-    private final PatientRepository patientRepository;
-    private final DoctorRepository doctorRepository;
 
     public AppointmentService(
-            AppointmentRepository appointmentRepository,
-            PatientRepository patientRepository,
-            DoctorRepository doctorRepository) {
+            AppointmentRepository appointmentRepository) {
 
         this.appointmentRepository = appointmentRepository;
-        this.patientRepository = patientRepository;
-        this.doctorRepository = doctorRepository;
     }
 
     // Create appointment
-    public Appointment createAppointment(Appointment appointment) {
-
-        // Validate patient
-        if (!patientRepository.existsById(appointment.getPatientId())) {
-            throw new RuntimeException("Patient not found");
-        }
-
-        // Validate doctor
-        if (!doctorRepository.existsById(appointment.getDoctorId())) {
-            throw new RuntimeException("Doctor not found");
-        }
+    public Appointment createAppointment(
+            Appointment appointment) {
 
         return appointmentRepository.save(appointment);
     }
 
     // Get all appointments
     public List<Appointment> getAllAppointments() {
+
         return appointmentRepository.findAll();
     }
 
+    // Get appointments by patient ID
+    public List<Appointment> getAppointmentsByPatientId(
+            String patientId) {
+
+        return appointmentRepository.findByPatientId(
+                patientId
+        );
+    }
+
     // Get appointment by ID
-    public Optional<Appointment> getAppointmentById(String id) {
+    public Optional<Appointment> getAppointmentById(
+            String id) {
+
         return appointmentRepository.findById(id);
     }
 
@@ -58,38 +52,36 @@ public class AppointmentService {
             String id,
             Appointment updatedAppointment) {
 
-        // Validate patient
-        if (!patientRepository.existsById(updatedAppointment.getPatientId())) {
-            throw new RuntimeException("Patient not found");
-        }
-
-        // Validate doctor
-        if (!doctorRepository.existsById(updatedAppointment.getDoctorId())) {
-            throw new RuntimeException("Doctor not found");
-        }
-
         return appointmentRepository.findById(id)
                 .map(appointment -> {
 
                     appointment.setPatientId(
-                            updatedAppointment.getPatientId());
+                            updatedAppointment.getPatientId()
+                    );
 
                     appointment.setDoctorId(
-                            updatedAppointment.getDoctorId());
+                            updatedAppointment.getDoctorId()
+                    );
 
                     appointment.setAppointmentDate(
-                            updatedAppointment.getAppointmentDate());
+                            updatedAppointment.getAppointmentDate()
+                    );
 
                     appointment.setAppointmentTime(
-                            updatedAppointment.getAppointmentTime());
+                            updatedAppointment.getAppointmentTime()
+                    );
 
                     appointment.setStatus(
-                            updatedAppointment.getStatus());
+                            updatedAppointment.getStatus()
+                    );
 
                     appointment.setReason(
-                            updatedAppointment.getReason());
+                            updatedAppointment.getReason()
+                    );
 
-                    return appointmentRepository.save(appointment);
+                    return appointmentRepository.save(
+                            appointment
+                    );
                 })
                 .orElse(null);
     }
@@ -98,7 +90,9 @@ public class AppointmentService {
     public boolean deleteAppointment(String id) {
 
         if (appointmentRepository.existsById(id)) {
+
             appointmentRepository.deleteById(id);
+
             return true;
         }
 

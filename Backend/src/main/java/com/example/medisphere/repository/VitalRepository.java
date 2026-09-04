@@ -5,8 +5,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface VitalRepository extends MongoRepository<Vital, String> {
+public interface VitalRepository
+        extends MongoRepository<Vital, String> {
 
     List<Vital> findByPatientId(String patientId);
-
 }

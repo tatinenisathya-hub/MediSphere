@@ -17,6 +17,7 @@ public class PrescriptionController {
 
     public PrescriptionController(
             PrescriptionService prescriptionService) {
+
         this.prescriptionService = prescriptionService;
     }
 
@@ -25,40 +26,70 @@ public class PrescriptionController {
     public Prescription createPrescription(
             @RequestBody Prescription prescription) {
 
-        return prescriptionService.addPrescription(prescription);
+        return prescriptionService.addPrescription(
+                prescription
+        );
     }
 
     // Get all prescriptions
     @GetMapping
     public List<Prescription> getAllPrescriptions() {
 
-        return prescriptionService.getAllPrescriptions();
+        return prescriptionService
+                .getAllPrescriptions();
+    }
+
+    // Get prescriptions by patient ID
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<List<Prescription>>
+    getPrescriptionsByPatient(
+
+            @PathVariable String patientId) {
+
+        return ResponseEntity.ok(
+                prescriptionService
+                        .getPrescriptionsByPatientId(
+                                patientId
+                        )
+        );
     }
 
     // Get prescription by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Prescription> getPrescriptionById(
+    public ResponseEntity<Prescription>
+    getPrescriptionById(
+
             @PathVariable String id) {
 
-        return prescriptionService.getPrescriptionById(id)
+        return prescriptionService
+                .getPrescriptionById(id)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElse(
+                        ResponseEntity.notFound().build()
+                );
     }
 
     // Update prescription
     @PutMapping("/{id}")
-    public ResponseEntity<Prescription> updatePrescription(
+    public ResponseEntity<Prescription>
+    updatePrescription(
+
             @PathVariable String id,
             @RequestBody Prescription prescription) {
 
         Prescription updatedPrescription =
-                prescriptionService.updatePrescription(id, prescription);
+                prescriptionService.updatePrescription(
+                        id,
+                        prescription
+                );
 
         if (updatedPrescription == null) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(updatedPrescription);
+        return ResponseEntity.ok(
+                updatedPrescription
+        );
     }
 
     // Delete prescription
@@ -67,7 +98,8 @@ public class PrescriptionController {
             @PathVariable String id) {
 
         boolean deleted =
-                prescriptionService.deletePrescription(id);
+                prescriptionService
+                        .deletePrescription(id);
 
         if (!deleted) {
             return ResponseEntity.notFound().build();

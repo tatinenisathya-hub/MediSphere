@@ -15,7 +15,9 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService;
 
-    public AppointmentController(AppointmentService appointmentService) {
+    public AppointmentController(
+            AppointmentService appointmentService) {
+
         this.appointmentService = appointmentService;
     }
 
@@ -32,6 +34,19 @@ public class AppointmentController {
     public List<Appointment> getAllAppointments() {
 
         return appointmentService.getAllAppointments();
+    }
+
+    // Get appointments by patient ID
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<List<Appointment>>
+    getAppointmentsByPatient(
+
+            @PathVariable String patientId) {
+
+        return ResponseEntity.ok(
+                appointmentService
+                        .getAppointmentsByPatientId(patientId)
+        );
     }
 
     // Get appointment by ID
@@ -51,7 +66,10 @@ public class AppointmentController {
             @RequestBody Appointment appointment) {
 
         Appointment updatedAppointment =
-                appointmentService.updateAppointment(id, appointment);
+                appointmentService.updateAppointment(
+                        id,
+                        appointment
+                );
 
         if (updatedAppointment == null) {
             return ResponseEntity.notFound().build();
@@ -65,7 +83,8 @@ public class AppointmentController {
     public ResponseEntity<Void> deleteAppointment(
             @PathVariable String id) {
 
-        boolean deleted = appointmentService.deleteAppointment(id);
+        boolean deleted =
+                appointmentService.deleteAppointment(id);
 
         if (!deleted) {
             return ResponseEntity.notFound().build();
