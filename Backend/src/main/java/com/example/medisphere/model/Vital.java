@@ -27,6 +27,11 @@ public class Vital {
 
     private LocalDateTime recordedAt;
 
+    // Wearable/device metadata
+    private String deviceId;
+    private String deviceType;
+    private String source;
+
     public Vital() {
     }
 
@@ -112,6 +117,30 @@ public class Vital {
 
     public void setRespiratoryRate(Double respiratoryRate) {
         this.respiratoryRate = respiratoryRate;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public LocalDateTime getRecordedAt() {

@@ -31,3 +31,23 @@ build/
 
 ### VS Code ###
 .vscode/
+### Android Studio / Gradle ###
+MediSphereMobile/.gradle/
+MediSphereMobile/**/build/
+MediSphereMobile/.idea/
+MediSphereMobile/local.properties
+MediSphereMobile/*.iml
+MediSphereMobile/**/captures/
+MediSphereMobile/.externalNativeBuild/
+MediSphereMobile/.cxx/
+
+### Environment / Local Configuration ###
+.env
+.env.*
+!.env.example
+
+Add-Content .gitignore "`n### Android generated files ###"
+Add-Content .gitignore "MediSphereMobile/.kotlin/"
+Add-Content .gitignore "MediSphereMobile/gradle/libs.versions.json"
+### Android generated files ###
+MediSphereMobile/.kotlin/

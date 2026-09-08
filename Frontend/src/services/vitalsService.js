@@ -67,10 +67,10 @@ export const deleteVitals = async (id) => {
     throw new Error("Failed to delete vitals");
   }
 
-  return response.text();
+  return true;
 };
 
-// Get all patients for dropdown
+// Get all patients
 export const getAllPatients = async () => {
   const response = await fetch(PATIENT_API_URL);
 

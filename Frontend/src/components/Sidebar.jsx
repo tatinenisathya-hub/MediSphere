@@ -2,11 +2,13 @@ function Sidebar({ activePage, setActivePage }) {
   const pages = [
     "Dashboard",
     "Patients",
+    "Patient 360",
     "Doctors",
     "Appointments",
     "Prescriptions",
     "FHIR Integration",
     "Vitals",
+    "Consent",
   ];
 
   return (

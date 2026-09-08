@@ -10,6 +10,8 @@ import AppointmentPage from "./pages/Appointments/AppointmentPage";
 import PrescriptionPage from "./pages/Prescriptions/PrescriptionPage";
 import FhirPage from "./pages/FHIR/FhirPage";
 import VitalsPage from "./pages/Vitals/VitalsPage";
+import Patient360Page from "./pages/Patient360/Patient360Page";
+import ConsentPage from "./pages/Consent/ConsentPage";
 
 function App() {
   const [activePage, setActivePage] = useState("Dashboard");
@@ -36,6 +38,12 @@ function App() {
 
       case "Vitals":
         return <VitalsPage />;
+
+      case "Patient 360":
+        return <Patient360Page />;
+
+      case "Consent":
+        return <ConsentPage />;
 
       default:
         return <Dashboard setActivePage={setActivePage} />;
