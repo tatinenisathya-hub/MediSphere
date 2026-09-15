@@ -82,7 +82,6 @@ health risk prediction using federated learning.
 
 ## System Architecture
 
-```text
 Redmi Watch
     ↓
 Mi Fitness
@@ -99,7 +98,7 @@ MongoDB
     ↓
 Patient 360 Dashboard
 
-FHIR Integration Flow
+##FHIR Integration Flow
 Spring Boot Backend
     ↓
 FHIR R4
