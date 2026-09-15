@@ -1,12 +1,8 @@
 # MediSphere Healthcare Management System
 
-MediSphere is a full-stack healthcare management system developed as an
-Infosys Springboard internship project.
+MediSphere is a full-stack healthcare management system developed as an Infosys Springboard internship project.
 
-The system integrates patient management, HL7 FHIR R4, MongoDB patient
-digital twins, Patient 360, consent management, wearable health data,
-Apache Kafka, an Android application using Health Connect, and AI-powered
-health risk prediction using federated learning.
+The system integrates patient management, HL7 FHIR R4, MongoDB patient digital twins, Patient 360, consent management, wearable health data, Apache Kafka, an Android application using Health Connect, and AI-powered health risk prediction using federated learning.
 
 ## Project Objectives
 
@@ -16,69 +12,48 @@ health risk prediction using federated learning.
 4. Create a Patient 360 dashboard.
 5. Manage patient consent.
 6. Provide AI-based cardiovascular and diabetes risk prediction.
-7. Apply federated learning so participating hospitals can train models
-   without sharing raw patient training data.
+7. Apply federated learning so participating hospitals can train models without sharing raw patient training data.
 8. Provide explainable AI using SHAP and validated risk outputs.
 
 ## Key Features
 
-- **Patient Management** --- Create, view, update, and delete patient
-  records.
+- **Patient Management** --- Create, view, update, and delete patient records.
 
 - **Doctor Management** --- Manage doctor details and specializations.
 
-- **Appointment Management** --- Manage patient-doctor appointments
-  and FHIR Appointment resources.
+- **Appointment Management** --- Manage patient-doctor appointments and FHIR Appointment resources.
 
-- **Prescription Management** --- Manage prescriptions and FHIR
-  MedicationRequest resources.
+- **Prescription Management** --- Manage prescriptions and FHIR MedicationRequest resources.
 
-- **Vital Monitoring** --- Store heart rate, temperature, blood
-  pressure, oxygen saturation, respiratory rate, source, and device
-  information.
+- **Vital Monitoring** --- Store heart rate, temperature, blood pressure, oxygen saturation, respiratory rate, source, and device information.
 
-- **FHIR R4 Integration** --- Support Patient, Practitioner,
-  Appointment, MedicationRequest, and Observation resources.
+- **FHIR R4 Integration** --- Support Patient, Practitioner, Appointment, MedicationRequest, and Observation resources.
 
-- **External FHIR Integration** --- Create and retrieve resources from
-  an external FHIR R4 server.
+- **External FHIR Integration** --- Create and retrieve resources from an external FHIR R4 server.
 
-- **Patient Digital Twin** --- Maintain an aggregated representation
-  of patient-related healthcare records.
+- **Patient Digital Twin** --- Maintain an aggregated representation of patient-related healthcare records.
 
-- **Patient 360 Dashboard** --- Display patient profile, digital twin
-  status, vitals, appointments, prescriptions, and doctors.
+- **Patient 360 Dashboard** --- Display patient profile, digital twin status, vitals, appointments, prescriptions, and doctors.
 
-- **Consent Management** --- Manage patient consent and require active
-  `WEARABLE_DATA` consent for wearable ingestion.
+- **Consent Management** --- Manage patient consent and require active `WEARABLE_DATA` consent for wearable ingestion.
 
-- **Wearable Integration** --- Receive health data through Android
-  Health Connect.
+- **Wearable Integration** --- Receive health data through Android Health Connect.
 
-- **Kafka Pipeline** --- Process wearable vital events through the
-  `wearable-vitals` Kafka topic.
+- **Kafka Pipeline** --- Process wearable vital events through the `wearable-vitals` Kafka topic.
 
-- **AI Risk Prediction** --- Predict cardiovascular and diabetes risk
-  using federated machine learning models.
+- **AI Risk Prediction** --- Predict cardiovascular and diabetes risk using federated machine learning models.
 
-- **Federated Learning** --- Train participating hospital models locally
-  and aggregate model updates without centralizing raw training data.
+- **Federated Learning** --- Train participating hospital models locally and aggregate model updates without centralizing raw training data.
 
-- **SHAP Explainability** --- Provide feature-level explanations for
-  cardiovascular and diabetes risk predictions.
+- **SHAP Explainability** --- Provide feature-level explanations for cardiovascular and diabetes risk predictions.
 
-- **Risk Calibration** --- Apply probability calibration to the
-  cardiovascular risk model for improved reliability of predicted risk
-  probabilities.
+- **Risk Calibration** --- Apply probability calibration to the cardiovascular risk model for improved reliability of predicted risk probabilities.
 
-- **AI Risk History** --- Store previous AI risk predictions for a
-  patient and display changes between predictions.
+- **AI Risk History** --- Store previous AI risk predictions for a patient and display changes between predictions.
 
-- **AI Risk Trend** --- Display latest risk, previous risk, percentage
-  change, trend direction, model version, and validation accuracy.
+- **AI Risk Trend** --- Display latest risk, previous risk, percentage change, trend direction, model version, and validation accuracy.
 
-- **Clinical Guideline Validation** --- Validate AI outputs against
-  defined clinical guideline checks.
+- **Clinical Guideline Validation** --- Validate AI outputs against defined clinical guideline checks.
 
 ## System Architecture
 
@@ -179,7 +154,7 @@ The current real-device integration was tested with a Redmi Watch 5 Lite through
 
 The configured development external FHIR server is:
 
-https://hapi.fhir.org/baseR4
+`https://hapi.fhir.org/baseR4`
 
 The public HAPI FHIR test server is intended for testing and demonstration, not production storage of patient or confidential information.
 
@@ -312,29 +287,31 @@ MediSphere integrates SHAP-based explainability for AI risk prediction.
 The explainability layer provides feature-level contributions that help show which input features influenced the model's prediction.
 
 **Example factors**
-Age
-Blood pressure
-Cholesterol
-Maximum heart rate
-Glucose
-BMI
-Insulin
-Diabetes pedigree function
+
+- Age
+- Blood pressure
+- Cholesterol
+- Maximum heart rate
+- Glucose
+- BMI
+- Insulin
+- Diabetes pedigree function
 
 SHAP explanations are generated independently from the displayed calibrated cardiovascular probability so that calibration does not change the underlying model feature contributions.
 
 ### AI Model Validation
 
 Milestone 2 includes an engineering validation layer covering:
-Model accuracy
-ROC-AUC
-Brier score
-Expected Calibration Error (ECE)
-Probability calibration
-Federated learning convergence
-Bias checks
-SHAP explainability
-Clinical guideline compliance
+
+- Model accuracy
+- ROC-AUC
+- Brier score
+- Expected Calibration Error (ECE)
+- Probability calibration
+- Federated learning convergence
+- Bias checks
+- SHAP explainability
+- Clinical guideline compliance
 
 #### Validation Results
 
@@ -366,15 +343,15 @@ The validation results above are engineering results obtained using synthetic da
 MediSphere stores AI risk prediction history for selected patients.
 
 #### Dashboard Features
-Latest cardiovascular risk
-Previous cardiovascular risk
-Latest diabetes risk
-Previous diabetes risk
-Change from previous prediction
-Increasing/decreasing/stable trend
-Model version
-Validation accuracy
-Prediction history
+- Latest cardiovascular risk
+- Previous cardiovascular risk
+- Latest diabetes risk
+- Previous diabetes risk
+- Change from previous prediction
+- Increasing/decreasing/stable trend
+- Model version
+- Validation accuracy
+- Prediction history
 
 #### Risk History Flow
 
@@ -415,10 +392,10 @@ The Spring Boot backend provides AI integration endpoints including:
 The Spring Boot service communicates with the FastAPI AI service through the configured AI base URL.
 
 **Development configuration**
-medisphere.ai.base-url=http://localhost:8001
+`medisphere.ai.base-url=http://localhost:8001`
 
 The FastAPI service runs on:
-http://localhost:8001
+`http://localhost:8001`
 
 ## Technology Stack
 
@@ -467,87 +444,88 @@ MediSphere/
 ## Setup and Installation
 
 ### Prerequisites
-Java 25
-MongoDB
-Apache Kafka
-Node.js and npm
-Python 3.x
-Android Studio for the mobile application
+- Java 25
+- MongoDB
+- Apache Kafka
+- Node.js and npm
+- Python 3.x
+- Android Studio for the mobile application
 
 ### MongoDB
 
 The backend uses:
-mongodb://localhost:27017/medisphere_db
+`mongodb://localhost:27017/medisphere_db`
+
 Make sure MongoDB is running.
 
 ### Apache Kafka
 
 The backend is configured for:
-localhost:9092
+`localhost:9092`
 
 The wearable event topic is:
-wearable-vitals
+`wearable-vitals`
 
 ### Backend Setup
 
 Navigate to the Backend directory:
-cd Backend
+`cd Backend`
 
 Start the Spring Boot backend:
-.\mvnw.cmd spring-boot:run
+`.\mvnw.cmd spring-boot:run`
 
 Backend:
-http://localhost:8080
+`http://localhost:8080`
 
 ### AI Service Setup
 
 Navigate to the AI directory:
-cd AI
+`cd AI`
 
 Install the Python dependencies:
-pip install -r requirements.txt
+`pip install -r requirements.txt`
 
 Start the FastAPI service:
-uvicorn app.main:app --host 0.0.0.0 --port 8001
+`uvicorn app.main:app --host 0.0.0.0 --port 8001`
 
 AI service:
-http://localhost:8001
+`http://localhost:8001`
 
 Health endpoint:
-http://localhost:8001/health
+`http://localhost:8001/health`
 
 The trained model artifacts are stored in:
-AI/saved_models/
+`AI/saved_models/`
 
 These include the cardiovascular and diabetes federated model weights, metadata, scalers, and cardiovascular calibration artifact.
 
 ### Frontend Setup
 
 Navigate to the Frontend directory:
-cd Frontend
+`cd Frontend`
 
 Install dependencies:
-npm install
+`npm install`
 
 Start the development server:
-npm run dev
+`npm run dev`
 
 Frontend:
-http://localhost:5173
+`http://localhost:5173`
 
 ### Android Application
 
 Open MediSphereMobile/ in Android Studio.
 
 The application uses:
-Kotlin
-Jetpack Compose
-Android Health Connect
-Minimum SDK 28
+- Kotlin
+- Jetpack Compose
+- Android Health Connect
+- Minimum SDK 28
 
 For a physical Android device, ADB reverse port forwarding can exposethe local backend:
 
-adb.exe -s <DEVICE_SERIAL> reverse tcp:8080 tcp:8080
+`adb.exe -s <DEVICE_SERIAL> reverse tcp:8080 tcp:8080`
 
 ## Patient Digital Twin
 
@@ -570,73 +548,73 @@ AI risk history is additionally maintained to support longitudinal risk monitori
 
 ## Security and Privacy
 
-Do not commit passwords, API keys, tokens, or other secrets.
-Do not place real patient-identifying information in the repository.
-The public external FHIR server is for testing/demo purposes and should not be used for production PHI.
-Generated build files, IDE files, Python caches, backup files, local configuration, and other development artifacts are excluded through .gitignore.
-The AI datasets used for Milestone 2 validation are synthetic or publicly available development datasets and are not intended to represent real patient records.
-AI predictions are intended for educational and engineering demonstration purposes and are not a substitute for professional medical diagnosis or clinical decision-making.
+- Do not commit passwords, API keys, tokens, or other secrets.
+- Do not place real patient-identifying information in the repository.
+- The public external FHIR server is for testing/demo purposes and should not be used for production PHI.
+- Generated build files, IDE files, Python caches, backup files, local configuration, and other development artifacts are excluded through `.gitignore`.
+- The AI datasets used for Milestone 2 validation are synthetic or publicly available development datasets and are not intended to represent real patient records.
+- AI predictions are intended for educational and engineering demonstration purposes and are not a substitute for professional medical diagnosis or clinical decision-making.
 
 ## Milestone Status
 
 ### Milestone 1 — FHIR Integration & Digital Twin
- FHIR integration
- External FHIR server communication
- MongoDB patient digital twins
- Wearable device management
- Health Connect integration
- Kafka wearable event pipeline
- Patient 360 dashboard
- Patient consent management
- Patient management
- Doctor management
- Appointment management
- Prescription management
- Vital management
- Android mobile application
+- FHIR integration
+- External FHIR server communication
+- MongoDB patient digital twins
+- Wearable device management
+- Health Connect integration
+- Kafka wearable event pipeline
+- Patient 360 dashboard
+- Patient consent management
+- Patient management
+- Doctor management
+- Appointment management
+- Prescription management
+- Vital management
+- Android mobile application
  
 ### Milestone 2 — AI Risk Prediction
-AI Risk Prediction
-Cardiovascular risk prediction model
-Diabetes risk prediction model
-Federated learning implementation
-Multi-hospital simulated federated training
-Cardiovascular model v2.0.0
-Diabetes model v4.0.0
-Model metadata and versioning
-Model scalers and saved model artifacts
-Cardiovascular probability calibration
-SHAP explainability
-AI model validation
-Accuracy validation above 90%
-ROC-AUC evaluation
-Brier score evaluation
-ECE calibration evaluation
-Federated convergence validation
-Bias validation
-Clinical guideline compliance validation
-Spring Boot to FastAPI AI integration
-AI model status endpoint
-AI risk prediction APIs
-AI risk history persistence
-Latest vs previous risk comparison
-AI risk trend visualization
-Frontend AI Risk Prediction dashboard
+- AI Risk Prediction
+- Cardiovascular risk prediction model
+- Diabetes risk prediction model
+- Federated learning implementation
+- Multi-hospital simulated federated training
+- Cardiovascular model v2.0.0
+- Diabetes model v4.0.0
+- Model metadata and versioning
+- Model scalers and saved model artifacts
+- Cardiovascular probability calibration
+- SHAP explainability
+- AI model validation
+- Accuracy validation above 90%
+- ROC-AUC evaluation
+- Brier score evaluation
+- ECE calibration evaluation
+- Federated convergence validation
+- Bias validation
+- Clinical guideline compliance validation
+- Spring Boot to FastAPI AI integration
+- AI model status endpoint
+- AI risk prediction APIs
+- AI risk history persistence
+- Latest vs previous risk comparison
+- AI risk trend visualization
+- Frontend AI Risk Prediction dashboard
 
 ## Future Enhancements
 
-Role-based authentication and authorization
-Additional wearable data types
-Advanced patient analytics
-Healthcare alerts and notifications
-Additional FHIR resource types
-Production-grade security and privacy controls
-Cloud deployment
-Automated testing and CI/CD
-Enhanced clinical decision-support capabilities
-Further AI model improvements using larger validated datasets
-Additional federated healthcare clients
-Continuous model monitoring and drift detection
+- Role-based authentication and authorization
+- Additional wearable data types
+- Advanced patient analytics
+- Healthcare alerts and notifications
+- Additional FHIR resource types
+- Production-grade security and privacy controls
+- Cloud deployment
+- Automated testing and CI/CD
+- Enhanced clinical decision-support capabilities
+- Further AI model improvements using larger validated datasets
+- Additional federated healthcare clients
+- Continuous model monitoring and drift detection
 
 ## Author
 
