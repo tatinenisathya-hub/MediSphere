@@ -84,6 +84,7 @@ health risk prediction using federated learning.
 
 ### Main Healthcare Data Flow
 
+```text
 Redmi Watch
     ↓
 Mi Fitness
@@ -91,14 +92,15 @@ Mi Fitness
 Health Connect
     ↓
 MediSphere Android App
-    ↓   
+    ↓
 Apache Kafka
-    ↓   
+    ↓
 Spring Boot Backend
-    ↓   
+    ↓
 MongoDB
-    ↓  
+    ↓
 Patient 360 Dashboard
+```
 
 ### FHIR Integration
 
