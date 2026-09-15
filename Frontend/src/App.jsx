@@ -12,6 +12,8 @@ import FhirPage from "./pages/FHIR/FhirPage";
 import VitalsPage from "./pages/Vitals/VitalsPage";
 import Patient360Page from "./pages/Patient360/Patient360Page";
 import ConsentPage from "./pages/Consent/ConsentPage";
+import LaboratoryPage from "./pages/Laboratory/LaboratoryPage";
+import AIRiskPredictionPage from "./pages/AIRiskPrediction/AIRiskPredictionPage";
 
 function App() {
   const [activePage, setActivePage] = useState("Dashboard");
@@ -44,6 +46,12 @@ function App() {
 
       case "Consent":
         return <ConsentPage />;
+
+      case "Laboratory":
+        return <LaboratoryPage />;
+      
+      case "AI Risk Prediction":
+        return <AIRiskPredictionPage />;
 
       default:
         return <Dashboard setActivePage={setActivePage} />;

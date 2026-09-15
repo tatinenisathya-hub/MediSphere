@@ -1,15 +1,16 @@
 function Sidebar({ activePage, setActivePage }) {
   const pages = [
-    "Dashboard",
-    "Patients",
-    "Patient 360",
-    "Doctors",
-    "Appointments",
-    "Prescriptions",
-    "FHIR Integration",
-    "Vitals",
-    "Consent",
-  ];
+  "Dashboard",
+  "Patients",
+  "Patient 360",
+  "Doctors",
+  "Appointments",
+  "Prescriptions",
+  "FHIR Integration",
+  "Vitals",
+  "Consent",
+  "AI Risk Prediction",
+];
 
   return (
     <aside className="sidebar">

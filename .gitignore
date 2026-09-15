@@ -51,3 +51,10 @@ Add-Content .gitignore "MediSphereMobile/.kotlin/"
 Add-Content .gitignore "MediSphereMobile/gradle/libs.versions.json"
 ### Android generated files ###
 MediSphereMobile/.kotlin/
+
+### AI generated files ###
+AI/**/__pycache__/
+AI/**/*.pyc
+AI/backups/
+AI/scripts/vadilationlayer.py.after_syntax_fix
+AI/scripts/vadilationlayer.py.before_convergence_fix

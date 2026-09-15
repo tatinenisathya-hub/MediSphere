@@ -1,0 +1,1305 @@
+.ai-risk-page {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.ai-page-header {
+  margin-bottom: 25px;
+}
+
+.ai-page-header h1 {
+  font-size: 32px;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.ai-page-header p {
+  color: #64748b;
+  font-size: 16px;
+}
+
+.ai-disclaimer {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+  padding: 15px 18px;
+  border-radius: 10px;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+.model-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.model-tab {
+  border: 1px solid #cbd5e1;
+  background: white;
+  color: #334155;
+  padding: 13px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.model-tab:hover {
+  border-color: #3b82f6;
+}
+
+.model-tab.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.ai-error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+
+.ai-section {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.ai-card,
+.ai-result-card,
+.ai-explanation {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.ai-card {
+  padding: 25px;
+}
+
+.ai-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.ai-card-header h2 {
+  color: #1e3a5f;
+  margin-bottom: 7px;
+}
+
+.ai-card-header p {
+  color: #64748b;
+}
+
+.model-label {
+  background: #dbeafe;
+  color: #1e40af;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ai-form {
+  width: 100%;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-field label {
+  color: #334155;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.form-field input,
+.form-field select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: white;
+  color: #1e293b;
+  font-size: 14px;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.form-field small {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.predict-button {
+  border: none;
+  border-radius: 7px;
+  padding: 13px 20px;
+  background: #3b82f6;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.predict-button:hover {
+  background: #2563eb;
+}
+
+.predict-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.reset-button {
+  border: none;
+  border-radius: 7px;
+  padding: 13px 20px;
+  background: #64748b;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.reset-button:hover {
+  background: #475569;
+}
+
+.reset-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.ai-result-card {
+  padding: 25px;
+}
+
+.result-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.result-label {
+  display: block;
+  color: #64748b;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 5px;
+}
+
+.result-heading h2 {
+  color: #1e3a5f;
+  font-size: 22px;
+}
+
+.risk-badge {
+  display: inline-block;
+  padding: 9px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.risk-high {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.risk-moderate {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.risk-low {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.risk-summary {
+  display: flex;
+  gap: 25px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+.risk-score {
+  min-width: 190px;
+  padding: 18px;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.risk-score span {
+  display: block;
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.risk-score strong {
+  color: #1e3a5f;
+  font-size: 30px;
+}
+
+.risk-meter {
+  height: 12px;
+  background: #e2e8f0;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 25px;
+}
+
+.risk-meter-fill {
+  height: 100%;
+  border-radius: 20px;
+  transition: width 0.5s ease;
+}
+
+.risk-meter-fill.risk-high {
+  background: #dc2626;
+}
+
+.risk-meter-fill.risk-moderate {
+  background: #f59e0b;
+}
+
+.risk-meter-fill.risk-low {
+  background: #16a34a;
+}
+
+.model-purpose {
+  margin-top: 18px;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ai-explanation {
+  padding: 25px;
+}
+
+.explanation-header h2 {
+  color: #1e3a5f;
+  margin-bottom: 5px;
+}
+
+.explanation-header p {
+  color: #64748b;
+}
+
+.contributors-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 22px;
+}
+
+.contributors-card {
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.contributors-card.positive {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+}
+
+.contributors-card.negative {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+.contributors-card h3 {
+  margin-bottom: 15px;
+  color: #334155;
+}
+
+.contributor-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.contributor-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(100, 116, 139, 0.18);
+}
+
+.contributor-row:last-child {
+  border-bottom: none;
+}
+
+.contributor-row span {
+  color: #475569;
+}
+
+.contributor-row strong {
+  color: #1e293b;
+}
+
+.no-contributors {
+  color: #64748b;
+}
+
+.feature-table {
+  margin-top: 25px;
+}
+
+.feature-table h3 {
+  color: #334155;
+  margin-bottom: 15px;
+}
+
+.feature-table .table-container {
+  overflow-x: auto;
+}
+
+.feature-table table {
+  min-width: 650px;
+}
+
+.direction-increase {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 15px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.direction-decrease {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 15px;
+  background: #dcfce7;
+  color: #166534;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.direction-neutral {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+   background: #dcfce7;
+  color: #000000;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+@media (max-width: 1100px) {
+  .form-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 850px) {
+  .form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contributors-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-card-header {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .predict-button,
+  .reset-button {
+    width: 100%;
+  }
+
+  .ai-card,
+  .ai-result-card,
+  .ai-explanation {
+    padding: 18px;
+  }
+}
+
+/* =========================================================
+   REAL PATIENT INTEGRATION
+========================================================= */
+
+.ai-patient-selector {
+  background: #ffffff;
+  border: 1px solid #dbe4f0;
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.ai-patient-selector > div:first-child {
+  margin-bottom: 14px;
+}
+
+.ai-patient-selector h2 {
+  margin: 0 0 5px;
+  color: #203d64;
+  font-size: 20px;
+}
+
+.ai-patient-selector p {
+  margin: 0;
+  color: #64748b;
+}
+
+.ai-patient-selector select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 15px;
+}
+
+.ai-patient-selector select:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.ai-loading-text {
+  margin-top: 10px !important;
+  color: #2563eb !important;
+  font-size: 14px;
+}
+
+.ai-patient-empty {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 18px;
+}
+
+.ai-patient-empty strong {
+  display: block;
+  color: #203d64;
+  margin-bottom: 5px;
+}
+
+.ai-patient-empty p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.ai-patient-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.ai-patient-summary > div {
+  background: #ffffff;
+  border: 1px solid #dbe4f0;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.ai-patient-summary span {
+  display: block;
+  color: #64748b;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.ai-patient-summary strong {
+  display: block;
+  color: #203d64;
+  font-size: 15px;
+  word-break: break-word;
+}
+
+/* Explain fields that require manual clinical entry */
+
+.form-field small {
+  display: block;
+  margin-top: 5px;
+  color: #718096;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* Responsive */
+
+@media (max-width: 1000px) {
+  .ai-patient-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .ai-patient-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-patient-selector {
+    padding: 16px;
+  }
+}
+
+/* =========================================================
+   AI MODEL STATUS
+   ========================================================= */
+
+.ai-model-status-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+.ai-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.status-section-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.ai-status-header h2 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  color: #0f172a;
+}
+
+.ai-status-header p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.ai-status-badge {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ai-status-badge.online {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.ai-status-badge.offline {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.ai-status-badge.loading {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.ai-status-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.ai-status-model {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 18px;
+  background: #f8fafc;
+}
+
+.ai-status-model-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 18px;
+}
+
+.ai-status-model-header > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ai-model-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-radius: 10px;
+  font-size: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.ai-status-model-header h3 {
+  margin: 0 0 3px;
+  font-size: 16px;
+  color: #0f172a;
+}
+
+.ai-status-model-header span {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.model-status-pill {
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 10px !important;
+  font-weight: 800;
+}
+
+.model-status-pill.loaded {
+  background: #dcfce7;
+  color: #166534 !important;
+}
+
+.model-status-pill.not-loaded {
+  background: #fee2e2;
+  color: #991b1b !important;
+}
+
+.ai-status-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ai-status-details div {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  padding: 11px;
+}
+
+.ai-status-details span {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.ai-status-details strong {
+  display: block;
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.federated-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.federated-status-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.federated-status h3 {
+  margin: 0 0 5px;
+  font-size: 15px;
+  color: #0f172a;
+}
+
+.federated-status p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #64748b;
+}
+
+/* =========================================================
+   RESPONSIVE AI MODEL STATUS
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .ai-status-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .ai-model-status-card {
+    padding: 18px;
+  }
+
+  .ai-status-header {
+    flex-direction: column;
+  }
+
+  .ai-status-badge {
+    align-self: flex-start;
+  }
+
+  .ai-status-details {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-status-model-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+/* =========================================================
+   MediSphere AI Risk History
+   ========================================================= */
+
+.ai-risk-history-card {
+  margin-top: 24px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #dbe4f0;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(20, 50, 90, 0.06);
+}
+
+.ai-risk-history-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.ai-risk-history-header h2 {
+  margin: 0 0 6px;
+  color: #183b65;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.ai-risk-history-header p {
+  margin: 0;
+  color: #667892;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ai-history-loading {
+  flex-shrink: 0;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #eaf2ff;
+  color: #3768a8;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------
+   Two model cards
+   --------------------------------------------------------- */
+
+.ai-risk-history-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.ai-risk-history-model {
+  min-width: 0;
+  padding: 20px;
+  background: #f8fbff;
+  border: 1px solid #dbe4f0;
+  border-radius: 14px;
+}
+
+/* ---------------------------------------------------------
+   Model heading
+   --------------------------------------------------------- */
+
+.ai-risk-history-model-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.ai-risk-history-model-title h3 {
+  margin: 0;
+  color: #183b65;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.ai-risk-history-model-title > span {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #e6f0ff;
+  color: #2e5f9c;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------
+   Latest / Previous columns
+   --------------------------------------------------------- */
+
+.ai-risk-history-values {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ai-risk-history-values > div {
+  min-width: 0;
+  min-height: 150px;
+  padding: 16px;
+  background: #ffffff;
+  border: 1px solid #e1e8f2;
+  border-radius: 12px;
+}
+
+.ai-risk-history-values span,
+.ai-risk-history-values small {
+  display: block;
+}
+
+/* Label */
+
+.ai-risk-history-values span {
+  margin-bottom: 9px;
+  color: #647894;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* Risk percentage */
+
+.ai-risk-history-values strong {
+  display: block;
+  margin-bottom: 9px;
+  color: #173b68;
+  font-size: 25px;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+/* Date */
+
+.ai-risk-history-values small {
+  margin-top: 8px;
+  color: #72839b;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+/* ---------------------------------------------------------
+   Risk band
+   --------------------------------------------------------- */
+
+.risk-history-band {
+  display: inline-block !important;
+  width: fit-content;
+  margin-top: 2px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 10px !important;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ---------------------------------------------------------
+   Model validation accuracy
+   --------------------------------------------------------- */
+
+.ai-model-accuracy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 15px;
+  border-top: 1px solid #dce5f0;
+}
+
+.ai-model-accuracy span {
+  color: #5e718b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ai-model-accuracy strong {
+  color: #1d5f3a;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------
+   SHAP neutral direction
+   --------------------------------------------------------- */
+
+.direction-neutral {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------
+   Tablet
+   --------------------------------------------------------- */
+
+@media (max-width: 1000px) {
+
+  .ai-risk-history-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+/* ---------------------------------------------------------
+   Mobile
+   --------------------------------------------------------- */
+
+@media (max-width: 600px) {
+
+  .ai-risk-history-card {
+    padding: 18px;
+  }
+
+  .ai-risk-history-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ai-risk-history-model-title {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .ai-risk-history-values {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-model-accuracy {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+}
+
+/* =========================================================
+   AI Risk Change Indicator
+   ========================================================= */
+
+.ai-risk-change {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 14px;
+  padding: 14px 16px;
+  background: #ffffff;
+  border: 1px solid #dbe5f0;
+  border-radius: 10px;
+}
+
+.ai-risk-change > div {
+  min-width: 0;
+  flex: 1;
+}
+
+.ai-risk-change > div > span {
+  display: block;
+  margin-bottom: 6px;
+  color: #647894;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.ai-risk-change strong {
+  display: block;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.ai-risk-trend {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Risk increased */
+
+.risk-trend-increase {
+  color: #a52b2b;
+  background: #ffe8e8;
+}
+
+/* Risk decreased */
+
+.risk-trend-decrease {
+  color: #187044;
+  background: #e3f8eb;
+}
+
+/* No previous history / no change */
+
+.risk-trend-neutral {
+  color: #64748b;
+  background: #eef2f7;
+}
+
+
+/* =========================================================
+   AI Risk Trend Section
+   ========================================================= */
+
+.ai-risk-trend-section {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid #dce5f0;
+}
+
+.ai-risk-trend-header {
+  margin-bottom: 14px;
+}
+
+.ai-risk-trend-header h3 {
+  margin: 0 0 5px;
+  color: #183b65;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.ai-risk-trend-header p {
+  margin: 0;
+  color: #71839b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   Risk Trend Table
+   ========================================================= */
+
+.ai-risk-trend-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #dbe4f0;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.ai-risk-trend-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+.ai-risk-trend-table th {
+  padding: 13px 15px;
+  background: #203f68;
+  color: #ffffff;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.ai-risk-trend-table td {
+  padding: 14px 15px;
+  border-top: 1px solid #e3e9f1;
+  color: #233b5d;
+  vertical-align: middle;
+  font-size: 12px;
+}
+
+.ai-risk-trend-table tbody tr:first-child td {
+  border-top: none;
+}
+
+.ai-risk-trend-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+
+/* Model column */
+
+.ai-trend-model strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #183b65;
+  font-size: 12px;
+}
+
+.ai-trend-model span {
+  display: block;
+  color: #71839b;
+  font-size: 10px;
+}
+
+
+/* Latest / Previous risk */
+
+.ai-trend-risk-value {
+  display: block;
+  margin-bottom: 4px;
+  color: #183b65;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.ai-risk-trend-table td small {
+  display: block;
+  color: #71839b;
+  font-size: 10px;
+}
+
+
+/* Change value */
+
+.ai-trend-change {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+
+/* Trend badge inside table */
+
+.ai-trend-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  white-space: nowrap;
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.ai-trend-increase {
+  color: #a52b2b;
+  background: #ffe8e8;
+}
+
+.ai-trend-decrease {
+  color: #187044;
+  background: #e3f8eb;
+}
+
+.ai-trend-neutral {
+  color: #64748b;
+  background: #eef2f7;
+}
+
+
+/* =========================================================
+   Mobile Responsive
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .ai-risk-change {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .ai-risk-trend {
+    align-self: flex-start;
+  }
+
+  .ai-risk-trend-section {
+    margin-top: 18px;
+    padding-top: 16px;
+  }
+
+  .ai-risk-trend-table {
+    min-width: 700px;
+  }
+}

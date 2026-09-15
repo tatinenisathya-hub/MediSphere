@@ -1,0 +1,218 @@
+{
+  "model": "MediSphere Diabetes Risk Federated Model",
+  "version": "4.0.0",
+  "modelVersion": "4.0.0",
+  "modelType": "TensorFlow Federated Weighted FedAvg",
+  "framework": {
+    "tensorflow": "2.14.1",
+    "tensorflowFederated": "0.64.0"
+  },
+  "features": [
+    "pregnancies",
+    "glucose",
+    "bloodPressure",
+    "skinThickness",
+    "insulin",
+    "bmi",
+    "diabetesPedigree",
+    "age"
+  ],
+  "target": "outcome",
+  "numClients": 3,
+  "numberOfClients": 3,
+  "clientNames": [
+    "Hospital A",
+    "Hospital B",
+    "Hospital C"
+  ],
+  "clientEpochs": 3,
+  "batchSize": 32,
+  "federatedRounds": 20,
+  "clientLearningRate": 0.005,
+  "serverLearningRate": 0.5,
+  "trainingSamples": 4000,
+  "testSamples": 1000,
+  "evaluation": {
+    "accuracy": 0.949,
+    "roc_auc": 0.9887319999999999,
+    "brier_score": 0.0548207897892003,
+    "confusion_matrix": [
+      [
+        483,
+        17
+      ],
+      [
+        34,
+        466
+      ]
+    ]
+  },
+  "federatedConvergence": {
+    "roundMetrics": [
+      {
+        "round": 1,
+        "loss": 0.635341465473175,
+        "accuracy": 0.6744999885559082,
+        "auc": 0.7627694606781006,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 2,
+        "loss": 0.5990911722183228,
+        "accuracy": 0.7436666488647461,
+        "auc": 0.8383504152297974,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 3,
+        "loss": 0.5660802125930786,
+        "accuracy": 0.7857499718666077,
+        "auc": 0.8789447546005249,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 4,
+        "loss": 0.5313438177108765,
+        "accuracy": 0.8193333148956299,
+        "auc": 0.9075063467025757,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 5,
+        "loss": 0.5007044076919556,
+        "accuracy": 0.8349999785423279,
+        "auc": 0.920160174369812,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 6,
+        "loss": 0.4677799344062805,
+        "accuracy": 0.8506666421890259,
+        "auc": 0.9336930513381958,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 7,
+        "loss": 0.4388476610183716,
+        "accuracy": 0.8615000247955322,
+        "auc": 0.9417463541030884,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 8,
+        "loss": 0.4106752574443817,
+        "accuracy": 0.8709999918937683,
+        "auc": 0.9483623504638672,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 9,
+        "loss": 0.38825446367263794,
+        "accuracy": 0.878250002861023,
+        "auc": 0.9525052309036255,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 10,
+        "loss": 0.3632752001285553,
+        "accuracy": 0.8855833411216736,
+        "auc": 0.957751989364624,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 11,
+        "loss": 0.34349215030670166,
+        "accuracy": 0.8878333568572998,
+        "auc": 0.9614276885986328,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 12,
+        "loss": 0.3231225907802582,
+        "accuracy": 0.8948333263397217,
+        "auc": 0.965875506401062,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 13,
+        "loss": 0.3066510856151581,
+        "accuracy": 0.8988333344459534,
+        "auc": 0.9679653644561768,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 14,
+        "loss": 0.292087197303772,
+        "accuracy": 0.9044166803359985,
+        "auc": 0.9707562923431396,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 15,
+        "loss": 0.2771807014942169,
+        "accuracy": 0.9083333611488342,
+        "auc": 0.9734110236167908,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 16,
+        "loss": 0.2629176378250122,
+        "accuracy": 0.9124166369438171,
+        "auc": 0.9761691093444824,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 17,
+        "loss": 0.25215739011764526,
+        "accuracy": 0.9158333539962769,
+        "auc": 0.9777060151100159,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 18,
+        "loss": 0.24085040390491486,
+        "accuracy": 0.9173333048820496,
+        "auc": 0.9791018962860107,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 19,
+        "loss": 0.2302742749452591,
+        "accuracy": 0.921583354473114,
+        "auc": 0.9811441898345947,
+        "updateNonFinite": 0
+      },
+      {
+        "round": 20,
+        "loss": 0.22201703488826752,
+        "accuracy": 0.9241666793823242,
+        "auc": 0.9822308421134949,
+        "updateNonFinite": 0
+      }
+    ],
+    "summary": {
+      "status": "IMPROVED",
+      "rounds": 20,
+      "firstRoundAccuracy": 0.6744999885559082,
+      "lastRoundAccuracy": 0.9241666793823242,
+      "accuracyChange": 0.24966669082641602,
+      "firstRoundLoss": 0.635341465473175,
+      "lastRoundLoss": 0.22201703488826752,
+      "lossChange": -0.41332443058490753
+    }
+  },
+  "validation": {
+    "validationMethod": "Stratified 80/20 held-out test evaluation",
+    "accuracyTarget": 0.9,
+    "accuracyTargetStatus": "PASS",
+    "datasetType": "synthetic",
+    "shapValidation": "PENDING",
+    "biasAudit": "PENDING",
+    "calibration": "PENDING",
+    "clinicalGuidelineValidation": "PENDING"
+  },
+  "trainingDataset": "MediSphere synthetic diabetes v4 dataset",
+  "datasetType": "synthetic",
+  "modelPurpose": "Educational AI risk prediction and clinical decision-support demonstration. This output is not a medical diagnosis.",
+  "clinicalUse": false
+}

@@ -1,0 +1,151 @@
+{
+  "model": "cardiovascular_risk",
+  "modelVersion": "2.0.0",
+  "framework": "TensorFlow",
+  "tensorflowVersion": "2.14.1",
+  "federated_framework": "TensorFlow Federated",
+  "federatedFrameworkVersion": "0.64.0",
+  "federated_algorithm": "Weighted FedAvg",
+  "number_of_clients": 3,
+  "client_names": [
+    "Hospital A",
+    "Hospital B",
+    "Hospital C"
+  ],
+  "number_of_rounds": 10,
+  "batch_size": 32,
+  "client_learning_rate": 0.03,
+  "server_learning_rate": 1.0,
+  "features": [
+    "age",
+    "sex",
+    "cp",
+    "trestbps",
+    "chol",
+    "fbs",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal"
+  ],
+  "target": "cvd_target",
+  "training_samples": 1920,
+  "test_samples": 480,
+  "accuracy": 0.9208333333333333,
+  "roc_auc": 0.9831896858750624,
+  "brier_score": 0.06615825250913242,
+  "ece": 0.10315790872555225,
+  "evaluation": {
+    "accuracy": 0.9208333333333333,
+    "roc_auc": 0.9831896858750624,
+    "brier_score": 0.06615825250913242,
+    "ece": 0.10315790872555225,
+    "confusion_matrix": [
+      [
+        262,
+        16
+      ],
+      [
+        22,
+        180
+      ]
+    ],
+    "classification_report": {
+      "0.0": {
+        "precision": 0.9225352112676056,
+        "recall": 0.9424460431654677,
+        "f1-score": 0.9323843416370107,
+        "support": 278.0
+      },
+      "1.0": {
+        "precision": 0.9183673469387755,
+        "recall": 0.8910891089108911,
+        "f1-score": 0.9045226130653267,
+        "support": 202.0
+      },
+      "accuracy": 0.9208333333333333,
+      "macro avg": {
+        "precision": 0.9204512791031906,
+        "recall": 0.9167675760381794,
+        "f1-score": 0.9184534773511687,
+        "support": 480.0
+      },
+      "weighted avg": {
+        "precision": 0.9207812350292229,
+        "recall": 0.9208333333333333,
+        "f1-score": 0.9206591975297603,
+        "support": 480.0
+      }
+    }
+  },
+  "round_metrics": [
+    {
+      "round": 1,
+      "accuracy": 0.6375,
+      "loss": 0.2336255006134867
+    },
+    {
+      "round": 2,
+      "accuracy": 0.7109375,
+      "loss": 0.21415836924144666
+    },
+    {
+      "round": 3,
+      "accuracy": 0.7619791666666667,
+      "loss": 0.19474829208104014
+    },
+    {
+      "round": 4,
+      "accuracy": 0.8005208333333333,
+      "loss": 0.17347053543171317
+    },
+    {
+      "round": 5,
+      "accuracy": 0.8432291666666667,
+      "loss": 0.1504535314065044
+    },
+    {
+      "round": 6,
+      "accuracy": 0.8677083333333333,
+      "loss": 0.12815121023903658
+    },
+    {
+      "round": 7,
+      "accuracy": 0.8864583333333333,
+      "loss": 0.10834449453605403
+    },
+    {
+      "round": 8,
+      "accuracy": 0.9005208333333333,
+      "loss": 0.0919230192508365
+    },
+    {
+      "round": 9,
+      "accuracy": 0.9104166666666667,
+      "loss": 0.07874439068461243
+    },
+    {
+      "round": 10,
+      "accuracy": 0.9203125,
+      "loss": 0.06791599204158665
+    }
+  ],
+  "convergence": {
+    "status": "IMPROVED",
+    "rounds": 10,
+    "first_round_accuracy": 0.6375,
+    "last_round_accuracy": 0.9203125,
+    "accuracy_change": 0.2828125,
+    "first_round_loss": 0.2336255006134867,
+    "last_round_loss": 0.06791599204158665,
+    "loss_change": -0.16570950857190003
+  },
+  "target_definition": "0 = lower cardiovascular risk; 1 = higher cardiovascular risk according to the synthetic demonstration target",
+  "training_dataset": "MediSphere synthetic cardiovascular training dataset",
+  "dataset_type": "synthetic",
+  "model_purpose": "Educational AI risk prediction and clinical decision-support demonstration. This output is not a medical diagnosis.",
+  "clinical_use": false
+}
