@@ -137,7 +137,7 @@ Patient 360
 
 The backend validates that the wearable is connected, assigned to the patient, the patient exists, and the required WEARABLE_DATA consent is active.
 
-The current real-device integration was tested with a `Redmi Watch 5 Lite` through `Mi Fitness and Health Connect`. Only values actually available from the data source are stored; unsupported measurements are not fabricated.
+The current real-device integration was tested with a `Redmi Watch 5 Lite` through `Mi Fitness` and `Health Connect`. Only values actually available from the data source are stored; unsupported measurements are not fabricated.
 
 ## FHIR Integration
 
