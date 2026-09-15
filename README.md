@@ -37,7 +37,7 @@ The system integrates patient management, HL7 FHIR R4, MongoDB patient digital t
 
 - **Consent Management** --- Manage patient consent and require active `WEARABLE_DATA` consent for wearable ingestion.
 
-- **Wearable Integration** --- Receive health data through Android Health Connect.
+- **Wearable Integration** --- Receive health data through `Android Health Connect`.
 
 - **Kafka Pipeline** --- Process wearable vital events through the `wearable-vitals` Kafka topic.
 
@@ -153,9 +153,9 @@ The current real-device integration was tested with a Redmi Watch 5 Lite through
 ### External FHIR Server
 
 The configured development external FHIR server is:
-
+```powershell
 `https://hapi.fhir.org/baseR4`
-
+```
 The public HAPI FHIR test server is intended for testing and demonstration, not production storage of patient or confidential information.
 
 ### Vital FHIR Codes
@@ -392,10 +392,14 @@ The Spring Boot backend provides AI integration endpoints including:
 The Spring Boot service communicates with the FastAPI AI service through the configured AI base URL.
 
 **Development configuration**
+```powershell
 `medisphere.ai.base-url=http://localhost:8001`
+```
 
 The FastAPI service runs on:
+```powershell
 `http://localhost:8001`
+```
 
 ## Technology Stack
 
@@ -454,64 +458,96 @@ MediSphere/
 ### MongoDB
 
 The backend uses:
+```powershell
 `mongodb://localhost:27017/medisphere_db`
+```
 
 Make sure MongoDB is running.
 
 ### Apache Kafka
 
 The backend is configured for:
+```powershell
 `localhost:9092`
+```
 
 The wearable event topic is:
+```powershell
 `wearable-vitals`
+```
 
 ### Backend Setup
 
 Navigate to the Backend directory:
+```powershell
 `cd Backend`
+```
 
 Start the Spring Boot backend:
+```powershell
 `.\mvnw.cmd spring-boot:run`
+```
 
 Backend:
+```powershell
 `http://localhost:8080`
+```
 
 ### AI Service Setup
 
 Navigate to the AI directory:
+```powershell
 `cd AI`
+```
 
 Install the Python dependencies:
+```powershell
 `pip install -r requirements.txt`
+```
 
 Start the FastAPI service:
+```powershell
 `uvicorn app.main:app --host 0.0.0.0 --port 8001`
+```
 
 AI service:
+```powershell
 `http://localhost:8001`
+```
 
 Health endpoint:
+```powershell
 `http://localhost:8001/health`
+```
 
 The trained model artifacts are stored in:
+```powershell
 `AI/saved_models/`
+```
 
 These include the cardiovascular and diabetes federated model weights, metadata, scalers, and cardiovascular calibration artifact.
 
 ### Frontend Setup
 
 Navigate to the Frontend directory:
+```powershell
 `cd Frontend`
+```
 
 Install dependencies:
+```powershell
 `npm install`
+```
 
 Start the development server:
+```powershell
 `npm run dev`
+```
 
 Frontend:
+```powershell
 `http://localhost:5173`
+```
 
 ### Android Application
 
@@ -524,8 +560,9 @@ The application uses:
 - Minimum SDK 28
 
 For a physical Android device, ADB reverse port forwarding can exposethe local backend:
-
+```powershell
 `adb.exe -s <DEVICE_SERIAL> reverse tcp:8080 tcp:8080`
+```
 
 ## Patient Digital Twin
 
