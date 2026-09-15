@@ -99,7 +99,7 @@ MongoDB
     ↓
 Patient 360 Dashboard
 
-
+FHIR Integration Flow
 Spring Boot Backend
     ↓
 FHIR R4
