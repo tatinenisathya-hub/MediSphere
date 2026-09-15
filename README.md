@@ -104,34 +104,39 @@ Patient 360 Dashboard
 
 ### FHIR Integration
 
+```text
 Spring Boot Backend
-    ↓
-FHIR R4
-    ↓
+        ↓
+      FHIR R4
+        ↓
 External FHIR Server
+```
 
 ### AI Risk Prediction Flow
 
+```text
 Patient Data
-    ↓
+      ↓
 Spring Boot AI Integration
-    ↓
+      ↓
 FastAPI AI Service
-    ↓
+      ↓
 Federated Risk Models
-    ├── Cardiovascular Risk Model
-    └── Diabetes Risk Model
-    ↓
+      ├── Cardiovascular Risk Model
+      └── Diabetes Risk Model
+      ↓
 SHAP Explainability
-    ↓
+      ↓
 Risk Prediction + Validation
-    ↓
+      ↓
 AI Risk History
-    ↓
+      ↓
 Patient AI Risk Dashboard
+```
 
 ### Wearable Data Flow
 
+```text
 Wearable Device
       ↓
 Mi Fitness
@@ -153,6 +158,7 @@ Vital Record
 MongoDB
       ↓
 Patient 360
+```
 
 The backend validates that the wearable is connected, assigned to the patient, the patient exists, and the required WEARABLE_DATA consent is active.
 
@@ -162,13 +168,13 @@ The current real-device integration was tested with a Redmi Watch 5 Lite through
 
 ### Internal FHIR Endpoints
 
-**Resource	                                                               Endpoint**
-Patient	                                                           GET /api/fhir/Patient/{id}
-Practitioner	                                                     GET /api/fhir/Practitioner/{id}
-Appointment	                                                        GET /api/fhir/Appointment/{id}
-MedicationRequest	                                                  GET /api/fhir/MedicationRequest/{id}
-Vital Observation	                                                  GET /api/fhir/Observation/vital/{id}
-
+| Resource | Endpoint |
+|---|---|
+| Patient | `GET /api/fhir/Patient/{id}` |
+| Practitioner | `GET /api/fhir/Practitioner/{id}` |
+| Appointment | `GET /api/fhir/Appointment/{id}` |
+| MedicationRequest | `GET /api/fhir/MedicationRequest/{id}` |
+| Vital Observation | `GET /api/fhir/Observation/vital/{id}` |
 ### External FHIR Server
 
 The configured development external FHIR server is:
@@ -179,14 +185,15 @@ The public HAPI FHIR test server is intended for testing and demonstration, not 
 
 ### Vital FHIR Codes
 
-  **Vital	                                   LOINC**
-Heart rate	                                   8867-4
-Body temperature	                             8310-5
-Blood pressure panel	                          85354-9
-Systolic blood pressure	                       8480-6
-Diastolic blood pressure	                    8462-4
-Oxygen saturation	                             2708-6
-Respiratory rate	                             9279-1
+ | Vital | LOINC |
+|---|---|
+| Heart rate | `8867-4` |
+| Body temperature | `8310-5` |
+| Blood pressure panel | `85354-9` |
+| Systolic blood pressure | `8480-6` |
+| Diastolic blood pressure | `8462-4` |
+| Oxygen saturation | `2708-6` |
+| Respiratory rate | `9279-1` |
 
 ## AI Risk Prediction & Federated Learning
 
@@ -196,6 +203,7 @@ The AI service is implemented as a separate Python FastAPI service and is integr
 
 ### AI Service Architecture
 
+```text
 React Frontend
       ↓
 Spring Boot AI REST API
@@ -207,18 +215,29 @@ Risk Prediction Models
 Prediction + Explainability
       ↓
 React AI Risk Dashboard
+```
 
 ### Federated Learning Architecture
 
 The cardiovascular model is trained using federated learning across three simulated hospital clients.
 
-Hospital A ── Local Training ──┐
-                               │
-Hospital B ── Local Training ──┼──→ Federated Aggregation
-                               │
-Hospital C ── Local Training ──┘
-                                      ↓
-                              Global Model
+```text
+Hospital A
+    ↓
+Local Training
+    ↓
+    ┐
+    │
+Hospital B
+    ↓
+Local Training
+    ↓
+    ├────→ Federated Aggregation
+    │              ↓
+Hospital C        Global Model
+    ↓
+Local Training
+```
 
 The federated learning workflow is designed so that raw training data remains at the participating client while model information is aggregated to create the global model.
 
@@ -230,27 +249,30 @@ The implementation uses TensorFlow Federated (TFF).
 
 #### Architecture
 
+```text
 13 Input Features
-      ↓
+        ↓
 Dense(64, ReLU)
-      ↓
+        ↓
 Dropout(0.10)
-      ↓
+        ↓
 Dense(32, ReLU)
-      ↓
+        ↓
 Dropout(0.10)
-      ↓
+        ↓
 Dense(16, ReLU)
-      ↓
+        ↓
 Dense(1, Sigmoid)
+```
 
 #### Federated Training
-3 simulated hospital clients
-10 federated rounds
-Weighted FedAvg
-Client learning rate: 0.03
-Batch size: 32
-
+| Parameter | Value |
+|---|---|
+| Simulated hospital clients | 3 |
+| Federated rounds | 10 |
+| Aggregation | Weighted FedAvg |
+| Client learning rate | 0.03 |
+| Batch size | 32 |
 A probability calibration artifact is also included for the cardiovascular model.
 
 ### Diabetes Risk Model
@@ -259,23 +281,27 @@ A probability calibration artifact is also included for the cardiovascular model
 
 #### Architecture
 
+```text
 8 Input Features
-      ↓
+       ↓
 Dense(32, ReLU)
-      ↓
+       ↓
 Dropout(0.05)
-      ↓
+       ↓
 Dense(16, ReLU)
-      ↓
+       ↓
 Dense(1, Sigmoid)
+```
 
 #### Federated Training
-3 simulated hospital clients
-20 federated rounds
-Weighted FedAvg
-3 local epochs
-Batch size: 32
-Client SGDM learning rate: 0.005
+| Parameter | Value |
+|---|---|
+| Simulated hospital clients | 3 |
+| Federated rounds | 20 |
+| Aggregation | Weighted FedAvg |
+| Local epochs | 3 |
+| Batch size | 32 |
+| Client SGDM learning rate | 0.005 |
 
 Training uses a train-only StandardScaler to avoid information leakage from the validation data.
 
@@ -314,19 +340,22 @@ Clinical guideline compliance
 
 The following results were obtained during engineering validation using synthetic evaluation datasets.
 
-**Model	         Version	         Accuracy	       ROC-AUC	       Brier         Score	      Federated Rounds**
-Cardiovascular	   2.0.0	            92.5%	          0.9832	       0.0524 calibrated	          10
-Diabetes	         4.0.0	            94.9%	          0.9887	       0.0548	                      20
+
+| Model | Version | Accuracy | ROC-AUC | Brier Score | Federated Rounds |
+|---|---|---:|---:|---:|---:|
+| Cardiovascular | `2.0.0` | 92.5% | 0.9832 | 0.0524 calibrated | 10 |
+| Diabetes | `4.0.0` | 94.9% | 0.9887 | 0.0548 | 20 |
 
 #### Additional validation results
 
-**Validation Check	                 Cardiovascular	                         Diabetes**
-Accuracy > 90%	                           PASS	                                 PASS
-Calibration 	                           PASS	                                 PASS
-Bias check	                              PASS	                                 PASS
-SHAP validation	                        PASS	                                 PASS
-Federated convergence	                  IMPROVED	                              IMPROVED
-Clinical guideline compliance	            PASS	                                 PASS
+| Validation Check | Cardiovascular | Diabetes |
+|---|---|---|
+| Accuracy > 90% | PASS | PASS |
+| Calibration | PASS | PASS |
+| Bias check | PASS | PASS |
+| SHAP validation | PASS | PASS |
+| Federated convergence | IMPROVED | IMPROVED |
+| Clinical guideline compliance | PASS | PASS |
 
 For cardiovascular risk, calibration reduced the measured ECE from 0.1032 to 0.0194.
 
@@ -349,6 +378,7 @@ Prediction history
 
 #### Risk History Flow
 
+```text
 Patient
    ↓
 AI Prediction
@@ -362,6 +392,7 @@ Risk History
 Latest vs Previous
    ↓
 Risk Trend
+```
 
 AI risk history is stored separately from the patient's core healthcare records.
 
@@ -370,13 +401,14 @@ AI risk history is stored separately from the patient's core healthcare records.
 ### Endpoint Reference
 The Spring Boot backend provides AI integration endpoints including:
 
-**Function	                                                       Endpoint**
-AI Health	                                                   GET /api/ai/health
-AI Model Status	                                             GET /api/ai/models
-Cardiovascular Prediction	                                    POST /api/ai/cardiovascular/predict
-Diabetes Prediction	                                          POST /api/ai/diabetes/predict
-Risk History	                                                GET /api/ai/risk-history/{patientId}
-Save Risk History	                                             POST /api/ai/history
+| Function | HTTP Method | Endpoint |
+|---|---|---|
+| AI Health | GET | `/api/ai/health` |
+| AI Model Status | GET | `/api/ai/models` |
+| Cardiovascular Prediction | POST | `/api/ai/cardiovascular/predict` |
+| Diabetes Prediction | POST | `/api/ai/diabetes/predict` |
+| Risk History | GET | `/api/ai/risk-history/{patientId}` |
+| Save Risk History | POST | `/api/ai/history` |
 
 ### AI Service Configuration
 
@@ -390,25 +422,26 @@ http://localhost:8001
 
 ## Technology Stack
 
-**Layer	                                                       Technology**
-Frontend	                                                       React, Vite
-Backend	                                                       Spring Boot, Java
-AI Service	                                                    Python, FastAPI
-AI/ML	                                                          TensorFlow, TensorFlow Federated
-Explainability	                                                 SHAP
-Database	                                                       MongoDB
-Messaging	                                                    Apache Kafka
-Healthcare Interoperability	                                  HL7 FHIR R4
-FHIR Library	                                                 HAPI FHIR
-Mobile	                                                       Android, Kotlin, Jetpack Compose
-Health Data	                                                    Android Health Connect
-Backend Build	                                                 Maven
-Mobile Build	                                                 Gradle
+| Layer | Technology |
+|---|---|
+| Frontend | React, Vite |
+| Backend | Spring Boot, Java |
+| AI Service | Python, FastAPI |
+| AI/ML | TensorFlow, TensorFlow Federated |
+| Explainability | SHAP |
+| Database | MongoDB |
+| Messaging | Apache Kafka |
+| Healthcare Interoperability | HL7 FHIR R4 |
+| FHIR Library | HAPI FHIR |
+| Mobile | Android, Kotlin, Jetpack Compose |
+| Health Data | Android Health Connect |
+| Backend Build | Maven |
+| Mobile Build | Gradle |
 
 ## Project Structure
 
+```text
 MediSphere/
-│
 ├── AI/
 │   ├── app/
 │   │   ├── explainability/
@@ -430,7 +463,7 @@ MediSphere/
 │
 ├── .gitignore
 └── README.md
-
+```
 ## Setup and Installation
 
 ### Prerequisites
@@ -517,20 +550,19 @@ For a physical Android device, ADB reverse port forwarding can exposethe local b
 adb.exe -s <DEVICE_SERIAL> reverse tcp:8080 tcp:8080
 
 ## Patient Digital Twin
+
+### Digital Twin Data Flow
+```text
 Patient
-
-  ├── Appointments
-  ├── Prescriptions
-  ├── Vitals
-  └── AI Risk History
-
+   ├── Appointments
+   ├── Prescriptions
+   ├── Vitals
+   └── AI Risk History
           ↓
-
    Patient Digital Twin
-   
           ↓
-
       Patient 360
+```
 
 The digital twin maintains references to related healthcare records.
 
