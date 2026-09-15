@@ -137,7 +137,7 @@ Patient 360
 
 The backend validates that the wearable is connected, assigned to the patient, the patient exists, and the required WEARABLE_DATA consent is active.
 
-The current real-device integration was tested with a Redmi Watch 5 Lite through Mi Fitness and Health Connect. Only values actually available from the data source are stored; unsupported measurements are not fabricated.
+The current real-device integration was tested with a `Redmi Watch 5 Lite` through `Mi Fitness and Health Connect`. Only values actually available from the data source are stored; unsupported measurements are not fabricated.
 
 ## FHIR Integration
 
@@ -154,7 +154,7 @@ The current real-device integration was tested with a Redmi Watch 5 Lite through
 
 The configured development external FHIR server is:
 ```powershell
-`https://hapi.fhir.org/baseR4`
+https://hapi.fhir.org/baseR4
 ```
 The public HAPI FHIR test server is intended for testing and demonstration, not production storage of patient or confidential information.
 
@@ -393,12 +393,12 @@ The Spring Boot service communicates with the FastAPI AI service through the con
 
 **Development configuration**
 ```powershell
-`medisphere.ai.base-url=http://localhost:8001`
+medisphere.ai.base-url=http://localhost:8001
 ```
 
 The FastAPI service runs on:
 ```powershell
-`http://localhost:8001`
+http://localhost:8001
 ```
 
 ## Technology Stack
@@ -459,7 +459,7 @@ MediSphere/
 
 The backend uses:
 ```powershell
-`mongodb://localhost:27017/medisphere_db`
+mongodb://localhost:27017/medisphere_db
 ```
 
 Make sure MongoDB is running.
@@ -468,61 +468,61 @@ Make sure MongoDB is running.
 
 The backend is configured for:
 ```powershell
-`localhost:9092`
+localhost:9092
 ```
 
 The wearable event topic is:
 ```powershell
-`wearable-vitals`
+wearable-vitals
 ```
 
 ### Backend Setup
 
 Navigate to the Backend directory:
 ```powershell
-`cd Backend`
+cd Backend
 ```
 
 Start the Spring Boot backend:
 ```powershell
-`.\mvnw.cmd spring-boot:run`
+.\mvnw.cmd spring-boot:run
 ```
 
 Backend:
 ```powershell
-`http://localhost:8080`
+http://localhost:8080
 ```
 
 ### AI Service Setup
 
 Navigate to the AI directory:
 ```powershell
-`cd AI`
+cd AI
 ```
 
 Install the Python dependencies:
 ```powershell
-`pip install -r requirements.txt`
+pip install -r requirements.txt
 ```
 
 Start the FastAPI service:
 ```powershell
-`uvicorn app.main:app --host 0.0.0.0 --port 8001`
+uvicorn app.main:app --host 0.0.0.0 --port 8001
 ```
 
 AI service:
 ```powershell
-`http://localhost:8001`
+http://localhost:8001
 ```
 
 Health endpoint:
 ```powershell
-`http://localhost:8001/health`
+http://localhost:8001/health
 ```
 
 The trained model artifacts are stored in:
 ```powershell
-`AI/saved_models/`
+AI/saved_models/
 ```
 
 These include the cardiovascular and diabetes federated model weights, metadata, scalers, and cardiovascular calibration artifact.
@@ -531,22 +531,22 @@ These include the cardiovascular and diabetes federated model weights, metadata,
 
 Navigate to the Frontend directory:
 ```powershell
-`cd Frontend`
+cd Frontend
 ```
 
 Install dependencies:
 ```powershell
-`npm install`
+npm install
 ```
 
 Start the development server:
 ```powershell
-`npm run dev`
+npm run dev
 ```
 
 Frontend:
 ```powershell
-`http://localhost:5173`
+http://localhost:5173
 ```
 
 ### Android Application
@@ -561,7 +561,7 @@ The application uses:
 
 For a physical Android device, ADB reverse port forwarding can exposethe local backend:
 ```powershell
-`adb.exe -s <DEVICE_SERIAL> reverse tcp:8080 tcp:8080`
+adb.exe -s <DEVICE_SERIAL> reverse tcp:8080 tcp:8080
 ```
 
 ## Patient Digital Twin
