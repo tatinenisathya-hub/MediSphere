@@ -1,6 +1,7 @@
 package com.example.medisphere.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -11,18 +12,16 @@ public class Vital {
     @Id
     private String id;
 
+    @Indexed(unique = true, sparse = true)
+    private String eventId;
+
     private String patientId;
 
     private Double heartRate;
-
     private Double temperature;
-
     private Double systolicBloodPressure;
-
     private Double diastolicBloodPressure;
-
     private Double oxygenSaturation;
-
     private Double respiratoryRate;
 
     private LocalDateTime recordedAt;
@@ -61,6 +60,14 @@ public class Vital {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 
     public String getPatientId() {
@@ -119,6 +126,14 @@ public class Vital {
         this.respiratoryRate = respiratoryRate;
     }
 
+    public LocalDateTime getRecordedAt() {
+        return recordedAt;
+    }
+
+    public void setRecordedAt(LocalDateTime recordedAt) {
+        this.recordedAt = recordedAt;
+    }
+
     public String getDeviceId() {
         return deviceId;
     }
@@ -141,13 +156,5 @@ public class Vital {
 
     public void setSource(String source) {
         this.source = source;
-    }
-
-    public LocalDateTime getRecordedAt() {
-        return recordedAt;
-    }
-
-    public void setRecordedAt(LocalDateTime recordedAt) {
-        this.recordedAt = recordedAt;
     }
 }

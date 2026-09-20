@@ -30,8 +30,12 @@ public class VitalService {
         return vitalRepository.findAll();
     }
 
+    // Patient-specific vital readings
+    // Latest readings appear first
     public List<Vital> getVitalsByPatientId(String patientId) {
-        return vitalRepository.findByPatientId(patientId);
+
+        return vitalRepository
+                .findByPatientIdOrderByRecordedAtDesc(patientId);
     }
 
     public Optional<Vital> getVitalById(String id) {
@@ -46,18 +50,23 @@ public class VitalService {
                     vital.setPatientId(updatedVital.getPatientId());
                     vital.setHeartRate(updatedVital.getHeartRate());
                     vital.setTemperature(updatedVital.getTemperature());
+
                     vital.setSystolicBloodPressure(
                             updatedVital.getSystolicBloodPressure()
                     );
+
                     vital.setDiastolicBloodPressure(
                             updatedVital.getDiastolicBloodPressure()
                     );
+
                     vital.setOxygenSaturation(
                             updatedVital.getOxygenSaturation()
                     );
+
                     vital.setRespiratoryRate(
                             updatedVital.getRespiratoryRate()
                     );
+
                     vital.setRecordedAt(updatedVital.getRecordedAt());
 
                     return vitalRepository.save(vital);

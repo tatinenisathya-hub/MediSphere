@@ -1,7 +1,9 @@
+
 package com.example.medisphere.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
@@ -20,67 +22,98 @@ public class WearableService {
     private final PatientRepository patientRepository;
     private final VitalRepository vitalRepository;
     private final ConsentService consentService;
+    private final VitalAlertService vitalAlertService;
 
     public WearableService(
             WearableDeviceRepository wearableDeviceRepository,
             PatientRepository patientRepository,
             VitalRepository vitalRepository,
-            ConsentService consentService) {
+            ConsentService consentService,
+            VitalAlertService vitalAlertService) {
 
         this.wearableDeviceRepository = wearableDeviceRepository;
         this.patientRepository = patientRepository;
         this.vitalRepository = vitalRepository;
         this.consentService = consentService;
+        this.vitalAlertService = vitalAlertService;
     }
+
+    // ---------------------------------------------------------
+    // Connect Wearable Device
+    // ---------------------------------------------------------
 
     public WearableDevice connectDevice(WearableDevice device) {
 
-        if (device.getPatientId() == null || device.getPatientId().isBlank()) {
+        if (device == null) {
+            throw new RuntimeException("Device details are required");
+        }
+
+        if (device.getPatientId() == null
+                || device.getPatientId().isBlank()) {
+
             throw new RuntimeException("Patient ID is required");
         }
 
-        patientRepository.findById(device.getPatientId())
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Patient not found with ID: "
-                                        + device.getPatientId()));
+        if (device.getDeviceId() == null
+                || device.getDeviceId().isBlank()) {
 
-        if (device.getDeviceId() == null || device.getDeviceId().isBlank()) {
             throw new RuntimeException("Device ID is required");
         }
 
-        WearableDevice saved = wearableDeviceRepository
-                .findByDeviceId(device.getDeviceId())
-                .orElse(device);
+        patientRepository.findById(device.getPatientId())
+                .orElseThrow(() -> new RuntimeException(
+                        "Patient not found with ID: "
+                                + device.getPatientId()));
 
-        saved.setDeviceId(device.getDeviceId());
-        saved.setDeviceName(device.getDeviceName());
-        saved.setDeviceType(device.getDeviceType());
-        saved.setPatientId(device.getPatientId());
-        saved.setStatus("CONNECTED");
+        WearableDevice savedDevice =
+                wearableDeviceRepository
+                        .findByDeviceId(device.getDeviceId())
+                        .orElse(device);
+
+        savedDevice.setDeviceId(device.getDeviceId());
+        savedDevice.setDeviceName(device.getDeviceName());
+        savedDevice.setDeviceType(device.getDeviceType());
+        savedDevice.setPatientId(device.getPatientId());
+        savedDevice.setStatus("CONNECTED");
 
         LocalDateTime now = LocalDateTime.now();
 
-        if (saved.getConnectedAt() == null) {
-            saved.setConnectedAt(now);
+        if (savedDevice.getConnectedAt() == null) {
+            savedDevice.setConnectedAt(now);
         }
 
-        saved.setLastSeen(now);
+        savedDevice.setLastSeen(now);
 
-        return wearableDeviceRepository.save(saved);
+        return wearableDeviceRepository.save(savedDevice);
     }
 
+    // ---------------------------------------------------------
+    // Get Devices By Patient
+    // ---------------------------------------------------------
+
     public List<WearableDevice> getDevicesByPatient(String patientId) {
+
+        if (patientId == null || patientId.isBlank()) {
+            throw new RuntimeException("Patient ID is required");
+        }
+
         return wearableDeviceRepository.findByPatientId(patientId);
     }
 
+    // ---------------------------------------------------------
+    // Disconnect Wearable Device
+    // ---------------------------------------------------------
+
     public WearableDevice disconnectDevice(String deviceId) {
+
+        if (deviceId == null || deviceId.isBlank()) {
+            throw new RuntimeException("Device ID is required");
+        }
 
         WearableDevice device = wearableDeviceRepository
                 .findByDeviceId(deviceId)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Wearable device not found: " + deviceId));
+                .orElseThrow(() -> new RuntimeException(
+                        "Wearable device not found: " + deviceId));
 
         device.setStatus("DISCONNECTED");
         device.setLastSeen(LocalDateTime.now());
@@ -88,7 +121,24 @@ public class WearableService {
         return wearableDeviceRepository.save(device);
     }
 
+    // ---------------------------------------------------------
+    // Ingest Wearable Vital Reading
+    // ---------------------------------------------------------
+
     public Vital ingestReading(WearableReadingRequest request) {
+
+        // -----------------------------------------------------
+        // Validate Request
+        // -----------------------------------------------------
+
+        if (request == null) {
+            throw new RuntimeException(
+                    "Wearable reading request is required");
+        }
+
+        // -----------------------------------------------------
+        // Validate Device ID
+        // -----------------------------------------------------
 
         if (request.getDeviceId() == null
                 || request.getDeviceId().isBlank()) {
@@ -96,16 +146,9 @@ public class WearableService {
             throw new RuntimeException("Device ID is required");
         }
 
-        WearableDevice device = wearableDeviceRepository
-                .findByDeviceId(request.getDeviceId())
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Wearable device is not connected"));
-
-        if (!"CONNECTED".equalsIgnoreCase(device.getStatus())) {
-            throw new RuntimeException(
-                    "Wearable device is disconnected");
-        }
+        // -----------------------------------------------------
+        // Validate Patient ID
+        // -----------------------------------------------------
 
         if (request.getPatientId() == null
                 || request.getPatientId().isBlank()) {
@@ -113,35 +156,80 @@ public class WearableService {
             throw new RuntimeException("Patient ID is required");
         }
 
-        if (!device.getPatientId().equals(request.getPatientId())) {
+        // -----------------------------------------------------
+        // Find Registered Wearable Device
+        // -----------------------------------------------------
+
+        WearableDevice device = wearableDeviceRepository
+                .findByDeviceId(request.getDeviceId())
+                .orElseThrow(() -> new RuntimeException(
+                        "Wearable device is not registered: "
+                                + request.getDeviceId()));
+
+        // -----------------------------------------------------
+        // Validate Device Connection Status
+        // -----------------------------------------------------
+
+        if (!"CONNECTED".equalsIgnoreCase(device.getStatus())) {
+
+            throw new RuntimeException(
+                    "Wearable device is disconnected");
+        }
+
+        // -----------------------------------------------------
+        // Validate Device-Patient Assignment
+        // -----------------------------------------------------
+
+        if (!Objects.equals(
+                device.getPatientId(),
+                request.getPatientId())) {
+
             throw new RuntimeException(
                     "Device is not assigned to this patient");
         }
 
+        // -----------------------------------------------------
+        // Validate Patient Existence
+        // -----------------------------------------------------
+
         Patient patient = patientRepository
                 .findById(request.getPatientId())
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Patient not found with ID: "
-                                        + request.getPatientId()));
+                .orElseThrow(() -> new RuntimeException(
+                        "Patient not found with ID: "
+                                + request.getPatientId()));
+
+        // -----------------------------------------------------
+        // Validate Active Wearable Consent
+        // -----------------------------------------------------
 
         /*
-         * Privacy rule:
-         * wearable data can be ingested only with active consent.
+         * Wearable data can be ingested only when
+         * the patient has active WEARABLE_DATA consent.
          */
+
         if (!consentService.hasActiveConsent(
                 patient.getId(),
                 "WEARABLE_DATA")) {
 
             throw new RuntimeException(
-                    "Active WEARABLE_DATA consent is required for this patient");
+                    "Active WEARABLE_DATA consent is required "
+                            + "for this patient");
         }
 
+        // -----------------------------------------------------
+        // Create Vital Entity
+        // -----------------------------------------------------
+
         Vital vital = new Vital();
+
+        /*
+         * Use the patient ID from the registered patient.
+         */
 
         vital.setPatientId(patient.getId());
 
         vital.setHeartRate(request.getHeartRate());
+
         vital.setTemperature(request.getTemperature());
 
         vital.setSystolicBloodPressure(
@@ -156,40 +244,75 @@ public class WearableService {
         vital.setRespiratoryRate(
                 request.getRespiratoryRate());
 
+        // -----------------------------------------------------
+        // Set Measurement Timestamp
+        // -----------------------------------------------------
+
         /*
-         * Preserve the measurement timestamp received
-         * from the wearable/Kafka event.
-         *
-         * If no timestamp is supplied, use the current
-         * server time as a fallback.
+         * Preserve the timestamp from the wearable event.
+         * If unavailable, use the current server timestamp.
          */
+
         if (request.getRecordedAt() != null) {
+
             vital.setRecordedAt(request.getRecordedAt());
+
         } else {
+
             vital.setRecordedAt(LocalDateTime.now());
         }
+
+        // -----------------------------------------------------
+        // Set Device Metadata
+        // -----------------------------------------------------
+
+        /*
+         * Always use the registered device ID.
+         * This prevents incorrect device metadata.
+         */
 
         vital.setDeviceId(device.getDeviceId());
 
         /*
-         * Prefer the device type received with the reading.
-         * Fall back to the registered device type.
+         * Use the registered device type.
+         * This ensures consistent device information.
          */
-        if (request.getDeviceType() != null
-                && !request.getDeviceType().isBlank()) {
 
-            vital.setDeviceType(request.getDeviceType());
-
-        } else {
-
-            vital.setDeviceType(device.getDeviceType());
-        }
+        vital.setDeviceType(device.getDeviceType());
 
         vital.setSource("WEARABLE");
 
+        // -----------------------------------------------------
+        // Update Device Last Seen Timestamp
+        // -----------------------------------------------------
+
         device.setLastSeen(LocalDateTime.now());
+
         wearableDeviceRepository.save(device);
 
-        return vitalRepository.save(vital);
+        // -----------------------------------------------------
+        // Save Vital Reading to MongoDB
+        // -----------------------------------------------------
+
+        Vital savedVital = vitalRepository.save(vital);
+
+        // -----------------------------------------------------
+        // Milestone 3: Evaluate Vital and Generate Alerts
+        // -----------------------------------------------------
+
+        /*
+         * Evaluate the saved vital reading.
+         *
+         * If a vital value crosses its configured threshold,
+         * VitalAlertService creates an alert in MongoDB.
+         */
+
+        vitalAlertService.evaluateVital(savedVital);
+
+        // -----------------------------------------------------
+        // Return Saved Vital
+        // -----------------------------------------------------
+
+        return savedVital;
     }
 }

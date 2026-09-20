@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 public class WearableReadingRequest {
 
+    private String eventId;
+
     private String deviceId;
     private String patientId;
     private String deviceType;
@@ -18,6 +20,14 @@ public class WearableReadingRequest {
     private LocalDateTime recordedAt;
 
     public WearableReadingRequest() {
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 
     public String getDeviceId() {

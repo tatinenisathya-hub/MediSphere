@@ -8,8 +8,12 @@ function Sidebar({ activePage, setActivePage }) {
   "Prescriptions",
   "FHIR Integration",
   "Vitals",
+  "Laboratory Results",
   "Consent",
   "AI Risk Prediction",
+  "Vital Alerts",
+  "Doctor Notifications",
+  "Patient Monitoring"
 ];
 
   return (

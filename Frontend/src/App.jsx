@@ -14,6 +14,9 @@ import Patient360Page from "./pages/Patient360/Patient360Page";
 import ConsentPage from "./pages/Consent/ConsentPage";
 import LaboratoryPage from "./pages/Laboratory/LaboratoryPage";
 import AIRiskPredictionPage from "./pages/AIRiskPrediction/AIRiskPredictionPage";
+import VitalAlerts from "./pages/VitalAlerts/VitalAlerts";
+import DoctorNotifications from "./pages/DoctorNotifications/DoctorNotifications";
+import PatientMonitoring from "./components/PatientMonitoring";
 
 function App() {
   const [activePage, setActivePage] = useState("Dashboard");
@@ -47,11 +50,20 @@ function App() {
       case "Consent":
         return <ConsentPage />;
 
-      case "Laboratory":
+      case "Laboratory Results":
         return <LaboratoryPage />;
       
       case "AI Risk Prediction":
         return <AIRiskPredictionPage />;
+
+      case "Vital Alerts":
+        return <VitalAlerts />;
+
+      case "Doctor Notifications":
+        return <DoctorNotifications />;
+
+      case "Patient Monitoring":
+        return <PatientMonitoring />;
 
       default:
         return <Dashboard setActivePage={setActivePage} />;

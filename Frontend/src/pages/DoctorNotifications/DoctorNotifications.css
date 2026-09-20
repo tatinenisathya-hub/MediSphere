@@ -1,0 +1,319 @@
+
+.doctor-notifications-page {
+  padding: 24px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+/* =====================================
+   PAGE HEADER
+===================================== */
+
+.notifications-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.notifications-header h1 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 28px;
+}
+
+.notifications-header p {
+  margin-top: 8px;
+  color: #6b7280;
+}
+
+/* =====================================
+   REFRESH BUTTON
+===================================== */
+
+.refresh-button {
+  border: none;
+  border-radius: 8px;
+  padding: 11px 20px;
+  color: white;
+  background: #2563eb;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.refresh-button:hover {
+  background: #1d4ed8;
+}
+
+.refresh-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* =====================================
+   STATISTICS CARDS
+===================================== */
+
+.notification-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.notification-stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.notification-stat-card span {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.notification-stat-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 30px;
+  color: #111827;
+}
+
+.high-stat strong {
+  color: #dc2626;
+}
+
+.medium-stat strong {
+  color: #d97706;
+}
+
+.low-stat strong {
+  color: #16a34a;
+}
+
+/* =====================================
+   FILTER BUTTONS
+===================================== */
+
+.notification-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.notification-filters button {
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 8px;
+  padding: 9px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.notification-filters button:hover {
+  background: #eff6ff;
+  border-color: #2563eb;
+}
+
+.notification-filters button.active-filter {
+  color: white;
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+/* =====================================
+   NOTIFICATION LIST
+===================================== */
+
+.notification-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+/* =====================================
+   NOTIFICATION CARD
+===================================== */
+
+.notification-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  border-left: 5px solid #9ca3af;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.notification-card.high {
+  border-left-color: #dc2626;
+}
+
+.notification-card.medium {
+  border-left-color: #d97706;
+}
+
+.notification-card.low {
+  border-left-color: #16a34a;
+}
+
+/* =====================================
+   CARD HEADER
+===================================== */
+
+.notification-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.notification-card-header h3 {
+  margin: 0 0 6px;
+  color: #111827;
+}
+
+.patient-id {
+  color: #6b7280;
+  font-size: 12px;
+  word-break: break-word;
+}
+
+/* =====================================
+   SEVERITY BADGES
+===================================== */
+
+.severity-badge {
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.severity-badge.high {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+.severity-badge.medium {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.severity-badge.low {
+  color: #166534;
+  background: #dcfce7;
+}
+
+/* =====================================
+   MEASURED VALUE
+===================================== */
+
+.notification-value {
+  margin: 20px 0 10px;
+  font-size: 30px;
+  font-weight: bold;
+  color: #111827;
+}
+
+.notification-value span {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* =====================================
+   ALERT MESSAGE
+===================================== */
+
+.notification-message-text {
+  color: #374151;
+  line-height: 1.5;
+}
+
+/* =====================================
+   NOTIFICATION DETAILS
+===================================== */
+
+.notification-details {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.notification-details p {
+  margin: 7px 0;
+  color: #6b7280;
+  font-size: 13px;
+  word-break: break-word;
+}
+
+/* =====================================
+   LOADING AND ERROR MESSAGES
+===================================== */
+
+.notification-message {
+  padding: 30px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.notification-error {
+  padding: 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* =====================================
+   RESPONSIVE DESIGN
+===================================== */
+
+/* Tablets and smaller laptops */
+@media (max-width: 1000px) {
+  .notification-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+  .doctor-notifications-page {
+    padding: 16px;
+  }
+
+  .notifications-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .refresh-button {
+    width: 100%;
+  }
+
+  .notification-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 600px) {
+  .notification-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .notification-card {
+    padding: 16px;
+  }
+
+  .notification-card-header {
+    gap: 8px;
+  }
+
+  .notification-value {
+    font-size: 26px;
+  }
+}
