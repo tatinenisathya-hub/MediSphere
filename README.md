@@ -6,14 +6,18 @@ The system integrates patient management, HL7 FHIR R4, MongoDB patient digital t
 
 ## Project Objectives
 
-1. Connect healthcare systems using FHIR.
-2. Store patient digital twins in MongoDB.
-3. Connect wearable devices and ingest health data.
-4. Create a Patient 360 dashboard.
-5. Manage patient consent.
-6. Provide AI-based cardiovascular and diabetes risk prediction.
-7. Apply federated learning so participating hospitals can train models without sharing raw patient training data.
-8. Provide explainable AI using SHAP and validated risk outputs.
+1. Connect healthcare systems using HL7 FHIR R4.
+2. Store patient digital twins and healthcare records in MongoDB.
+3. Integrate wearable devices through Android Health Connect.
+4. Ingest and process wearable health data using Apache Kafka.
+5. Create a Patient 360 dashboard for comprehensive patient monitoring.
+6. Manage patient consent and validate access to wearable health data.
+7. Detect abnormal vital measurements using configurable alert thresholds.
+8. Provide real-time doctor notifications through Kafka and Server-Sent Events (SSE).
+9. Provide AI-based cardiovascular and diabetes risk prediction.
+10. Apply federated learning so participating hospitals can train models without sharing raw patient training data.
+11. Provide explainable AI using SHAP and validated risk outputs.
+12. Maintain AI risk history and display risk trends for selected patients.
 
 ## Key Features
 
@@ -400,6 +404,156 @@ The FastAPI service runs on:
 ```powershell
 http://localhost:8001
 ```
+## Real-Time Monitoring & Alerts
+
+Milestone 3 introduces real-time wearable vital monitoring, abnormal vital detection, and doctor notification capabilities.
+
+### Supported Vital Measurements
+
+| Vital | Threshold |
+|---|---|
+| Heart Rate | 50–120 BPM |
+| Body Temperature | Maximum 38°C |
+| Systolic Blood Pressure | 90–180 mmHg |
+| Diastolic Blood Pressure | 60–120 mmHg |
+| Oxygen Saturation | Minimum 92% |
+| Respiratory Rate | 12–24 breaths/min |
+
+These are configured engineering alert thresholds and are not intended to independently establish a medical diagnosis.
+
+### Real-Time Monitoring Architecture
+
+```text
+Wearable Device
+      ↓
+Mi Fitness
+      ↓
+Android Health Connect
+      ↓
+MediSphere Android Application
+      ↓
+Wearable Vital Event
+      ↓
+Apache Kafka
+      ↓
+WearableVitalsConsumer
+      ↓
+WearableService
+      ↓
+Consent + Device + Patient Validation
+      ↓
+Vital Record
+      ↓
+MongoDB
+      ↓
+VitalAlertService
+      ↓
+Alert Generation
+      ↓
+DoctorNotificationProducer
+      ↓
+doctor-notifications Kafka Topic
+      ↓
+DoctorNotificationConsumer
+      ↓
+MongoDB
+      ↓
+Server-Sent Events (SSE)
+      ↓
+Doctor Notifications / Patient Monitoring Dashboard
+```
+
+### Kafka Topics
+
+| Topic | Purpose |
+|---|---|
+| `wearable-vitals` | Receives wearable vital events |
+| `doctor-notifications` | Publishes notifications generated from vital alerts |
+
+### REST API Endpoints
+
+#### Vital APIs
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/vitals` | Create a vital record |
+| GET | `/api/vitals` | Retrieve all vital records |
+| GET | `/api/vitals/{id}` | Retrieve a vital by ID |
+| GET | `/api/vitals/patient/{patientId}` | Retrieve patient-specific vitals |
+| PUT | `/api/vitals/{id}` | Update a vital record |
+| DELETE | `/api/vitals/{id}` | Delete a vital record |
+
+#### Alert APIs
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/alerts` | Retrieve alerts |
+| GET | `/api/alerts/patient/{patientId}` | Retrieve patient-specific alerts |
+
+#### Doctor Notification APIs
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/doctor-notifications` | Retrieve all doctor notifications |
+| GET | `/api/doctor-notifications/patient/{patientId}` | Retrieve patient notifications |
+
+#### Server-Sent Events
+
+```http
+GET /api/notifications/stream
+```
+
+The SSE endpoint streams doctor notification events to connected frontend clients.
+
+### Patient Monitoring Dashboard
+
+The Patient Monitoring dashboard provides:
+
+- Patient ID search.
+- Latest vital measurement cards.
+- Vital history display.
+- Patient-specific alert cards.
+- Real-time doctor notification updates.
+- SSE connection status.
+- Periodic polling for updated vitals and alerts.
+- Duplicate notification prevention.
+
+### Alert Processing Flow
+
+```text
+Incoming Vital
+      ↓
+Validate Device and Patient
+      ↓
+Validate Consent
+      ↓
+Store Vital Record
+      ↓
+Evaluate Thresholds
+      ↓
+Create Vital Alert
+      ↓
+Publish Doctor Notification
+      ↓
+Persist Notification
+      ↓
+Display Notification in Frontend
+```
+
+### Milestone 3 Validation
+
+The following functionality was implemented and tested:
+
+- Wearable vital event ingestion.
+- Kafka event consumption.
+- Vital data persistence.
+- Vital threshold evaluation.
+- Alert generation.
+- Doctor notification publishing.
+- Doctor notification persistence.
+- Patient-specific monitoring.
+- Server-Sent Events integration.
+- Frontend real-time notification display.
 
 ## Technology Stack
 
@@ -448,7 +602,7 @@ MediSphere/
 ## Setup and Installation
 
 ### Prerequisites
-- Java 25
+- Java 21
 - MongoDB
 - Apache Kafka
 - Node.js and npm
@@ -559,7 +713,7 @@ The application uses:
 - Android Health Connect
 - Minimum SDK 28
 
-For a physical Android device, ADB reverse port forwarding can exposethe local backend:
+For a physical Android device, ADB reverse port forwarding can expose the local backend:
 ```powershell
 adb.exe -s <DEVICE_SERIAL> reverse tcp:8080 tcp:8080
 ```
@@ -595,20 +749,22 @@ AI risk history is additionally maintained to support longitudinal risk monitori
 ## Milestone Status
 
 ### Milestone 1 — FHIR Integration & Digital Twin
-- FHIR integration
-- External FHIR server communication
-- MongoDB patient digital twins
-- Wearable device management
-- Health Connect integration
-- Kafka wearable event pipeline
-- Patient 360 dashboard
-- Patient consent management
+- FHIR R4 integration
+- Healthcare data standardization
+- Patient Digital Twin foundation
 - Patient management
 - Doctor management
 - Appointment management
 - Prescription management
-- Vital management
-- Android mobile application
+- Patient 360 view
+- Consent management
+- Privacy and access control
+- Wearable device integration foundation
+- Kafka infrastructure setup
+- Healthcare event processing foundation
+- Spring Boot backend development
+- React frontend development
+- MongoDB database integration
  
 ### Milestone 2 — AI Risk Prediction
 - AI Risk Prediction
@@ -638,20 +794,64 @@ AI risk history is additionally maintained to support longitudinal risk monitori
 - AI risk trend visualization
 - Frontend AI Risk Prediction dashboard
 
+### Milestone 3 — Real-Time Monitoring & Alerts
+- Real-time wearable vital monitoring
+- Wearable vital data ingestion
+- Apache Kafka wearable event pipeline
+- Wearable data validation
+- Patient validation
+- Device registration validation
+- Device connection validation
+- Device assignment validation
+- Consent validation
+- Heart rate monitoring
+- Blood pressure monitoring
+- Temperature monitoring
+- SpO2 monitoring
+- Respiratory rate monitoring
+- Threshold-based health alert detection
+- MongoDB vital data persistence
+- Health alert generation
+- Doctor notification processing
+- Kafka doctor notification pipeline
+- Server-Sent Events (SSE) integration
+- Real-time notification delivery
+- Patient monitoring dashboard
+- Doctor notification dashboard
+- Spring Boot wearable APIs
+- Wearable vital APIs
+- Health alert APIs
+- Doctor notification APIs
+- React real-time monitoring frontend
+- End-to-end wearable monitoring workflow
+
+## 🚀 Current Development Status
+
+| Milestone | Description | Status |
+|---|---|---|
+| Milestone 1 | Project Foundation & Patient Management | ✅ Completed |
+| Milestone 2 | AI Health Prediction & Digital Twin | ✅ Completed |
+| Milestone 3 | Real-Time Monitoring & Alerts | ✅ Completed |
+| Milestone 4 | Future Healthcare Enhancements | 🔜 Not covered |
+
+
 ## Future Enhancements
 
 - Role-based authentication and authorization
-- Additional wearable data types
-- Advanced patient analytics
-- Healthcare alerts and notifications
-- Additional FHIR resource types
+- Advanced wearable device integrations
+- Support for additional wearable vital measurements
+- Advanced patient analytics and reporting
+- Enhanced alert prioritization and escalation workflows
+- Additional FHIR R4 resource types
 - Production-grade security and privacy controls
-- Cloud deployment
-- Automated testing and CI/CD
+- Cloud deployment and infrastructure scaling
+- Automated testing and CI/CD pipelines
 - Enhanced clinical decision-support capabilities
 - Further AI model improvements using larger validated datasets
 - Additional federated healthcare clients
-- Continuous model monitoring and drift detection
+- Continuous AI model monitoring and drift detection
+- Advanced notification preferences and delivery channels
+- Mobile application improvements and expanded Health Connect support
 
 ## Author
 
