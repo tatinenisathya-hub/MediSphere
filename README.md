@@ -648,6 +648,36 @@ Record Health Outcomes
       ↓
 Compare Measurements Over Time
 ```
+### Care Plan Dashboard
+
+The React dashboard supports:
+
+- Patient selection
+- Care plan generation
+- Patient risk context display
+- Intervention status updates and notes
+- Health outcome entry and history
+- Latest-versus-previous outcome comparison
+- Care plan approval by a doctor
+
+### Care Plan API
+
+The backend exposes care plan operations through the `/api/care-plans` API.
+
+The frontend service uses this API for retrieving and generating plans, updating intervention adherence, recording outcomes, and approving plans.
+
+### Milestone 4 Validation
+
+The following implementation checks were completed:
+
+- Care Plans page integrated into the React application.
+- Care plan generation and dashboard UI implemented.
+- Intervention adherence controls implemented.
+- Health outcome entry and comparison UI implemented.
+- Provider approval UI implemented.
+- Frontend production build completed successfully.
+
+Backend integration and persistence should be tested in the target environment before treating those behaviors as end-to-end verified.
 
 ## Technology Stack
 
@@ -900,6 +930,20 @@ adb.exe -s <DEVICE_SERIAL> reverse tcp:8080 tcp:8080
 - React real-time monitoring frontend
 - End-to-end wearable monitoring workflow
 
+### Milestone 4 — Care Plan & Treatment
+- Risk-informed care plan draft generation
+- Cardiovascular and diabetes risk context
+- Predefined guideline-rule mapping
+- Pending provider review status
+- Doctor approval and approver tracking
+- Intervention adherence status updates
+- Intervention notes and timestamps
+- Health outcome measurement recording
+- Outcome history and numerical comparison
+- Care Plans & Treatment React dashboard
+- Spring Boot care plan API
+- Frontend production build
+
 ## 🚀 Current Development Status
 
 | Milestone | Description | Status |
@@ -907,8 +951,7 @@ adb.exe -s <DEVICE_SERIAL> reverse tcp:8080 tcp:8080
 | Milestone 1 | Project Foundation & Patient Management | ✅ Completed |
 | Milestone 2 | AI Health Prediction & Digital Twin | ✅ Completed |
 | Milestone 3 | Real-Time Monitoring & Alerts | ✅ Completed |
-| Milestone 4 | Future Healthcare Enhancements | 🔜 Not covered |
-
+| Milestone 4 | Future Healthcare Enhancements |✅ Completed |
 
 ## Future Enhancements
 
