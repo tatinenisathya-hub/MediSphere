@@ -1,0 +1,405 @@
+.careplan-page {
+    color: #243247;
+}
+
+.careplan-toolbar {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 18px;
+    background: #fff;
+    border: 1px solid #e5ebf3;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(30, 58, 95, .05);
+    margin: 24px 0;
+}
+
+.careplan-toolbar label,
+.item-status label,
+.outcome-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    color: #52627a;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.careplan-toolbar select,
+.item-status select,
+.outcome-form input,
+.outcome-form textarea,
+.approval-actions input {
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 10px 12px;
+    background: #fff;
+    color: #243247;
+    min-width: 220px;
+}
+
+.careplan-primary {
+    background: #2563eb;
+    color: #fff;
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.careplan-primary:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.careplan-existing {
+    margin-left: auto;
+}
+
+.careplan-message {
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 14px;
+}
+
+.careplan-message.error {
+    background: #fff1f2;
+    color: #9f1239;
+    border: 1px solid #fecdd3;
+}
+
+.careplan-message.success {
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+}
+
+.careplan-empty {
+    padding: 44px 24px;
+    text-align: center;
+    background: #fff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 14px;
+    color: #64748b;
+}
+
+.careplan-empty h2 {
+    color: #243247;
+    margin-bottom: 8px;
+}
+
+.careplan-summary {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 18px;
+    padding: 22px;
+    background: #fff;
+    border: 1px solid #e5ebf3;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(30, 58, 95, .05);
+}
+
+.eyebrow {
+    display: block;
+    color: #64748b;
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.careplan-summary h2 {
+    font-size: 21px;
+    margin-bottom: 5px;
+}
+
+.muted {
+    color: #718096;
+    font-size: 13px;
+}
+
+.status-pill {
+    display: inline-block;
+    border-radius: 20px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 800;
+    margin: 0 0 8px;
+}
+
+.status-pill.pending {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+.status-pill.approved {
+    color: #065f46;
+    background: #d1fae5;
+}
+
+.adherence-number {
+    display: block;
+    font-size: 28px;
+    color: #2563eb;
+    margin: 0 0 3px;
+}
+
+.careplan-disclaimer {
+    margin: 16px 0;
+    padding: 12px 15px;
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    color: #92400e;
+    border-radius: 7px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.careplan-section {
+    margin: 20px 0;
+    padding: 22px;
+    background: #fff;
+    border: 1px solid #e5ebf3;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(30, 58, 95, .04);
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.section-heading h2 {
+    font-size: 19px;
+    margin-bottom: 5px;
+}
+
+.section-heading p {
+    color: #718096;
+    font-size: 13px;
+}
+
+.risk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.risk-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 15px;
+    border-radius: 10px;
+    background: #f5f8fc;
+    border: 1px solid #e2e8f0;
+}
+
+.risk-card span,
+.risk-card small {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.risk-card strong {
+    font-size: 17px;
+    color: #1e3a5f;
+}
+
+.careplan-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.careplan-item {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) 180px;
+    gap: 14px;
+    align-items: start;
+    padding: 16px;
+    border: 1px solid #e5ebf3;
+    border-radius: 10px;
+}
+
+.item-index {
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 800;
+    padding-top: 2px;
+}
+
+.item-category {
+    color: #2563eb;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .8px;
+}
+
+.item-content h3 {
+    margin: 5px 0 7px;
+    font-size: 15px;
+}
+
+.item-content p {
+    color: #52627a;
+    font-size: 13px;
+    line-height: 1.55;
+    margin-bottom: 8px;
+}
+
+.item-content small {
+    display: block;
+    color: #718096;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.item-status select {
+    min-width: 0;
+    width: 100%;
+}
+
+.outcomes-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+}
+
+.outcome-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.outcome-form input,
+.outcome-form textarea {
+    width: 100%;
+    min-width: 0;
+}
+
+.outcome-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.outcome-history h3 {
+    margin: 0 0 12px;
+    font-size: 16px;
+}
+
+.outcome-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #edf1f5;
+    font-size: 13px;
+}
+
+.outcome-row small {
+    display: block;
+    color: #718096;
+    margin-top: 4px;
+    font-size: 11px;
+}
+
+.outcome-row b {
+    white-space: nowrap;
+    color: #1e3a5f;
+}
+
+.careplan-approval {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 20px 22px;
+    margin: 20px 0;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 14px;
+}
+
+.careplan-approval h2 {
+    font-size: 17px;
+    margin-bottom: 5px;
+}
+
+.careplan-approval p,
+.careplan-approval small {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.approval-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.approval-actions input {
+    min-width: 190px;
+}
+
+.approval-actions button {
+    border: 0;
+    background: #0f766e;
+    color: white;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.approval-actions button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+/* Responsive layout */
+@media (max-width: 900px) {
+    .careplan-summary,
+    .outcomes-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .careplan-existing {
+        margin-left: 0;
+    }
+
+    .careplan-item {
+        grid-template-columns: 30px minmax(0, 1fr);
+    }
+
+    .item-status {
+        grid-column: 2;
+    }
+
+    .careplan-toolbar select {
+        max-width: 100%;
+    }
+
+    .careplan-toolbar label {
+        width: 100%;
+    }
+
+    .careplan-primary {
+        width: 100%;
+    }
+
+    .approval-actions {
+        width: 100%;
+    }
+
+    .approval-actions input {
+        flex: 1;
+        min-width: 0;
+    }
+}

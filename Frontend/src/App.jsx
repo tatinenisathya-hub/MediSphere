@@ -17,6 +17,7 @@ import AIRiskPredictionPage from "./pages/AIRiskPrediction/AIRiskPredictionPage"
 import VitalAlerts from "./pages/VitalAlerts/VitalAlerts";
 import DoctorNotifications from "./pages/DoctorNotifications/DoctorNotifications";
 import PatientMonitoring from "./components/PatientMonitoring";
+import CarePlansPage from "./pages/CarePlans/CarePlansPage";
 
 function App() {
   const [activePage, setActivePage] = useState("Dashboard");
@@ -64,6 +65,9 @@ function App() {
 
       case "Patient Monitoring":
         return <PatientMonitoring />;
+
+      case "Care Plans & Treatment":
+        return <CarePlansPage />;
 
       default:
         return <Dashboard setActivePage={setActivePage} />;

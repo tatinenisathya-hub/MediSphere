@@ -3,12 +3,11 @@ package com.example.medisphere.controller;
 import com.example.medisphere.service.ExternalFhirService;
 import com.example.medisphere.service.ExternalFhirService.ExternalFhirResponse;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/fhir/external")
+@RequestMapping("/api/fhir/external/{resourceType}")
 @CrossOrigin(origins = "http://localhost:5173")
 public class ExternalFhirController {
 
@@ -21,7 +20,7 @@ public class ExternalFhirController {
                 externalFhirService;
     }
 
-    @PostMapping("/{resourceType}")
+    @PostMapping
     public ResponseEntity<String> createResource(
             @PathVariable String resourceType,
             @RequestBody String fhirJson) {
@@ -37,7 +36,7 @@ public class ExternalFhirController {
                 .body(response.body());
     }
 
-    @PutMapping("/{resourceType}/{resourceId}")
+    @PutMapping("/{resourceId}")
     public ResponseEntity<String> updateResource(
             @PathVariable String resourceType,
             @PathVariable String resourceId,
@@ -55,7 +54,7 @@ public class ExternalFhirController {
                 .body(response.body());
     }
 
-    @GetMapping("/{resourceType}/{resourceId}")
+    @GetMapping("/{resourceId}")
     public ResponseEntity<String> getResource(
             @PathVariable String resourceType,
             @PathVariable String resourceId) {
