@@ -647,6 +647,7 @@ Track Intervention Adherence
 Record Health Outcomes
       ↓
 Compare Measurements Over Time
+```
 
 ## Technology Stack
 
