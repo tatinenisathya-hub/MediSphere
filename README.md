@@ -2,10 +2,9 @@
 
 MediSphere is a full-stack healthcare management system developed as an Infosys Springboard internship project.
 
-The system integrates patient management, HL7 FHIR R4, MongoDB patient digital twins, Patient 360, consent management, wearable health data, Apache Kafka, an Android application using Health Connect, and AI-powered cardiovascular and diabetes risk prediction using federated learning.
+The system integrates patient management, HL7 FHIR R4, MongoDB patient digital twins, Patient 360, consent management, wearable health data, Apache Kafka, and an Android application using Health Connect.
 
-It also provides AI-assisted care plan generation, healthcare provider approval, intervention adherence tracking, and health outcome comparisons.
-
+It also provides AI-powered cardiovascular and diabetes risk prediction using federated learning, real-time health monitoring, and AI-assisted care plan generation with provider approval, intervention adherence tracking, and health outcome monitoring.
 ## Project Objectives
 
 1. Connect healthcare systems using HL7 FHIR R4.
@@ -20,6 +19,10 @@ It also provides AI-assisted care plan generation, healthcare provider approval,
 10. Apply federated learning so participating hospitals can train models without sharing raw patient training data.
 11. Provide explainable AI using SHAP and validated risk outputs.
 12. Maintain AI risk history and display risk trends for selected patients.
+13. Generate personalized care plan drafts based on patient risk predictions and predefined guideline rules.
+14. Enable healthcare providers to review and approve care plans.
+15. Track patient adherence to care plan interventions.
+16. Record and compare health outcome measurements over time.
 
 ## Key Features
 
@@ -61,15 +64,15 @@ It also provides AI-assisted care plan generation, healthcare provider approval,
 
 - **Clinical Guideline Validation** --- Validate AI outputs against defined clinical guideline checks.
 
-- **AI-Assisted Care Plans** --- Generate care plan drafts using patient risk predictions and predefined guideline rules.
+- **AI-Assisted Care Plans** — Generate care plan drafts using patient risk predictions and predefined guideline rules.
 
-- **Provider Review and Approval** --- Require healthcare provider review and record the approving doctor's ID.
+- **Provider Review and Approval** — Allow doctors to review and approve generated care plans.
 
-- **Adherence Tracking** --- Track care plan interventions using `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED`, and `SKIPPED` statuses.
+- **Intervention Adherence Tracking** — Track interventions using NOT_STARTED, IN_PROGRESS, COMPLETED, and SKIPPED statuses.
 
-- **Health Outcome Tracking** --- Record health measurements with metric names, values, units, notes, and timestamps.
+- **Health Outcome Tracking** — Record health measurements, values, units, notes, and timestamps.
 
-- **Outcome Comparison** --- Display the latest and previous measurements for the same metric and unit, including their numerical difference.
+- **Outcome Comparison** — Compare the latest and previous measurements for the same metric and unit.
 
 ## System Architecture
 
@@ -155,55 +158,64 @@ The backend validates that the wearable is connected, assigned to the patient, t
 
 The current real-device integration was tested with a `Redmi Watch 5 Lite` through `Mi Fitness` and `Health Connect`. Only values actually available from the data source are stored; unsupported measurements are not fabricated.
 
-## FHIR Integration
+## FHIR Integration & Digital Twin
 
-### Internal FHIR Endpoints
+Milestone 1 establishes the foundation of MediSphere by integrating HL7 FHIR R4, implementing patient digital twins, and developing core healthcare management features.
 
-| Resource | Endpoint |
-|---|---|
-| Patient | `GET /api/fhir/Patient/{id}` |
-| Practitioner | `GET /api/fhir/Practitioner/{id}` |
-| Appointment | `GET /api/fhir/Appointment/{id}` |
-| MedicationRequest | `GET /api/fhir/MedicationRequest/{id}` |
-| Vital Observation | `GET /api/fhir/Observation/vital/{id}` |
-### External FHIR Server
+### FHIR R4 Integration
 
-The configured development external FHIR server is:
-```powershell
-https://hapi.fhir.org/baseR4
-```
-The public HAPI FHIR test server is intended for testing and demonstration, not production storage of patient or confidential information.
+- Integrates healthcare data using the HL7 FHIR R4 standard.
+- Supports Patient, Practitioner, Appointment, MedicationRequest, and Observation resources.
+- Provides internal FHIR REST APIs.
+- Integrates with an external HAPI FHIR R4 server.
+- Standardizes healthcare data for interoperability.
 
-### Vital FHIR Codes
+### Patient Digital Twin
 
- | Vital | LOINC |
-|---|---|
-| Heart rate | `8867-4` |
-| Body temperature | `8310-5` |
-| Blood pressure panel | `85354-9` |
-| Systolic blood pressure | `8480-6` |
-| Diastolic blood pressure | `8462-4` |
-| Oxygen saturation | `2708-6` |
-| Respiratory rate | `9279-1` |
-
-## Patient Digital Twin
-
-### Digital Twin Data Flow
-```text
-Patient
-   ├── Appointments
-   ├── Prescriptions
-   ├── Vitals
-   └── AI Risk History
-          ↓
-   Patient Digital Twin
-          ↓
-      Patient 360
-```
+- Creates a digital twin for each patient.
+- Aggregates patient-related healthcare records.
+- Maintains references to appointments, prescriptions, and vital measurements.
+- Integrates patient data into the Patient 360 dashboard.
+- Supports the foundation for longitudinal patient monitoring.
 
 The digital twin maintains references to related healthcare records.
 
 AI risk history is additionally maintained to support longitudinal risk monitoring and trend visualization.
+
+### Healthcare Management
+
+- Patient registration and management.
+- Doctor registration and management.
+- Appointment scheduling and management.
+- Prescription management.
+- Vital measurement management.
+- Patient 360 dashboard for viewing consolidated patient information.
+
+### Consent & Privacy Management
+
+- Manages patient consent.
+- Validates consent for wearable health data access.
+- Supports privacy-aware healthcare data processing.
+
+### Backend & Frontend Development
+
+- Spring Boot backend development.
+- React frontend development.
+- MongoDB database integration.
+- REST API integration between frontend and backend.
+
+### Milestone 1 Validation
+
+The following foundational functionality was implemented:
+
+- FHIR R4 resource integration.
+- Internal and external FHIR server connectivity.
+- Patient digital twin creation.
+- Patient, doctor, appointment, and prescription management.
+- Patient 360 dashboard integration.
+- Consent management.
+- MongoDB integration.
+- Frontend and backend integration.
 
 ## AI Risk Prediction & Federated Learning
 
@@ -956,20 +968,15 @@ adb.exe -s <DEVICE_SERIAL> reverse tcp:8080 tcp:8080
 ## Future Enhancements
 
 - Role-based authentication and authorization
-- Advanced wearable device integrations
-- Support for additional wearable vital measurements
-- Advanced patient analytics and reporting
-- Enhanced alert prioritization and escalation workflows
-- Additional FHIR R4 resource types
-- Production-grade security and privacy controls
-- Cloud deployment and infrastructure scaling
+- Advanced wearable integrations and support for additional vital measurements
+- Enhanced patient analytics and health outcome reporting
+- Improved alert prioritization and notification management
+- Support for additional FHIR R4 resources
+- Production-grade security, privacy, and cloud deployment
 - Automated testing and CI/CD pipelines
-- Enhanced clinical decision-support capabilities
-- Further AI model improvements using larger validated datasets
-- Additional federated healthcare clients
-- Continuous AI model monitoring and drift detection
-- Advanced notification preferences and delivery channels
-- Mobile application improvements and expanded Health Connect support
+- Enhanced AI models, clinical decision support, and guideline integration
+- Advanced federated learning and continuous model monitoring
+- Personalized care plans, progress tracking, and automated reminders
 
 ## Author
 
