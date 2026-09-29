@@ -2,7 +2,9 @@
 
 MediSphere is a full-stack healthcare management system developed as an Infosys Springboard internship project.
 
-The system integrates patient management, HL7 FHIR R4, MongoDB patient digital twins, Patient 360, consent management, wearable health data, Apache Kafka, an Android application using Health Connect, and AI-powered health risk prediction using federated learning.
+The system integrates patient management, HL7 FHIR R4, MongoDB patient digital twins, Patient 360, consent management, wearable health data, Apache Kafka, an Android application using Health Connect, and AI-powered cardiovascular and diabetes risk prediction using federated learning.
+
+It also provides AI-assisted care plan generation, healthcare provider approval, intervention adherence tracking, and health outcome comparisons.
 
 ## Project Objectives
 
@@ -58,6 +60,16 @@ The system integrates patient management, HL7 FHIR R4, MongoDB patient digital t
 - **AI Risk Trend** --- Display latest risk, previous risk, percentage change, trend direction, model version, and validation accuracy.
 
 - **Clinical Guideline Validation** --- Validate AI outputs against defined clinical guideline checks.
+
+- **AI-Assisted Care Plans** --- Generate care plan drafts using patient risk predictions and predefined guideline rules.
+
+- **Provider Review and Approval** --- Require healthcare provider review and record the approving doctor's ID.
+
+- **Adherence Tracking** --- Track care plan interventions using `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED`, and `SKIPPED` statuses.
+
+- **Health Outcome Tracking** --- Record health measurements with metric names, values, units, notes, and timestamps.
+
+- **Outcome Comparison** --- Display the latest and previous measurements for the same metric and unit, including their numerical difference.
 
 ## System Architecture
 
@@ -173,6 +185,25 @@ The public HAPI FHIR test server is intended for testing and demonstration, not 
 | Diastolic blood pressure | `8462-4` |
 | Oxygen saturation | `2708-6` |
 | Respiratory rate | `9279-1` |
+
+## Patient Digital Twin
+
+### Digital Twin Data Flow
+```text
+Patient
+   ├── Appointments
+   ├── Prescriptions
+   ├── Vitals
+   └── AI Risk History
+          ↓
+   Patient Digital Twin
+          ↓
+      Patient 360
+```
+
+The digital twin maintains references to related healthcare records.
+
+AI risk history is additionally maintained to support longitudinal risk monitoring and trend visualization.
 
 ## AI Risk Prediction & Federated Learning
 
@@ -555,6 +586,68 @@ The following functionality was implemented and tested:
 - Server-Sent Events integration.
 - Frontend real-time notification display.
 
+## Care Plan & Treatment
+
+Milestone 4 introduces AI-assisted care plan generation, healthcare provider approval, intervention adherence tracking, and health outcome recording.
+
+### Care Plan Generation
+
+- Generates care plan drafts using the patient's latest available cardiovascular and diabetes risk history.
+- Uses risk-informed, predefined guideline rules to generate care plan items.
+- Stores the generation source as `AI_RISK_AND_GUIDELINE_RULES`.
+- Creates generated plans with `PENDING_REVIEW` status.
+
+The current guideline mapping is a prototype and is not a comprehensive clinical guideline engine.
+
+### Provider Review and Approval
+
+- Generated care plans are presented as drafts for healthcare provider review.
+- A doctor can approve a care plan.
+- The approving doctor's ID is stored with the approval information.
+- AI-generated plans are decision-support drafts and do not independently prescribe treatment.
+
+### Intervention Adherence Tracking
+
+Each care plan intervention supports the following statuses:
+
+| Status | Description |
+|---|---|
+| `NOT_STARTED` | The intervention has not been started. |
+| `IN_PROGRESS` | The intervention is currently in progress. |
+| `COMPLETED` | The intervention has been marked completed. |
+| `SKIPPED` | The intervention has been skipped. |
+
+Intervention notes and update timestamps are also supported.
+The dashboard displays the proportion of completed interventions.
+
+### Health Outcome Tracking
+
+- Records health outcome measurements against a care plan.
+- Stores the metric name, numeric value, unit, notes, and timestamp.
+- Displays the latest and previous measurements for the same metric and unit.
+- Calculates and displays the numerical difference between those measurements.
+
+Outcome comparisons are numerical only and do not determine whether a patient's health has clinically improved or worsened.
+
+### Care Plan Workflow
+
+```text
+Select Patient
+      ↓
+Retrieve Latest Risk History
+      ↓
+Generate Care Plan Draft
+      ↓
+Pending Provider Review
+      ↓
+Provider Approval
+      ↓
+Track Intervention Adherence
+      ↓
+Record Health Outcomes
+      ↓
+Compare Measurements Over Time
+
 ## Technology Stack
 
 | Layer | Technology |
@@ -717,25 +810,6 @@ For a physical Android device, ADB reverse port forwarding can expose the local 
 ```powershell
 adb.exe -s <DEVICE_SERIAL> reverse tcp:8080 tcp:8080
 ```
-
-## Patient Digital Twin
-
-### Digital Twin Data Flow
-```text
-Patient
-   ├── Appointments
-   ├── Prescriptions
-   ├── Vitals
-   └── AI Risk History
-          ↓
-   Patient Digital Twin
-          ↓
-      Patient 360
-```
-
-The digital twin maintains references to related healthcare records.
-
-AI risk history is additionally maintained to support longitudinal risk monitoring and trend visualization.
 
 ## Security and Privacy
 
