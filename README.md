@@ -4,25 +4,27 @@ MediSphere is a full-stack healthcare management system developed as an Infosys 
 
 The system integrates patient management, HL7 FHIR R4, MongoDB patient digital twins, Patient 360, consent management, wearable health data, Apache Kafka, and an Android application using Health Connect.
 
-It also provides AI-powered cardiovascular and diabetes risk prediction using federated learning, real-time health monitoring, and AI-assisted care plan generation with provider approval, intervention adherence tracking, and health outcome monitoring.
+It also provides JWT-based authentication and role-based access control (RBAC), AI-powered cardiovascular and diabetes risk prediction using federated learning, real-time health monitoring, and AI-assisted care plan generation with provider approval, intervention adherence tracking, and health outcome monitoring.
 ## Project Objectives
 
-1. Connect healthcare systems using HL7 FHIR R4.
-2. Store patient digital twins and healthcare records in MongoDB.
-3. Integrate wearable devices through Android Health Connect.
-4. Ingest and process wearable health data using Apache Kafka.
-5. Create a Patient 360 dashboard for comprehensive patient monitoring.
-6. Manage patient consent and validate access to wearable health data.
-7. Detect abnormal vital measurements using configurable alert thresholds.
-8. Provide real-time doctor notifications through Kafka and Server-Sent Events (SSE).
-9. Provide AI-based cardiovascular and diabetes risk prediction.
-10. Apply federated learning so participating hospitals can train models without sharing raw patient training data.
-11. Provide explainable AI using SHAP and validated risk outputs.
-12. Maintain AI risk history and display risk trends for selected patients.
-13. Generate personalized care plan drafts based on patient risk predictions and predefined guideline rules.
-14. Enable healthcare providers to review and approve care plans.
-15. Track patient adherence to care plan interventions.
-16. Record and compare health outcome measurements over time.
+1. Authenticate patients, doctors, and administrators using JWT-based authentication.
+2. Enforce role-based and ownership-based access to protected healthcare APIs.
+3. Connect healthcare systems using HL7 FHIR R4.
+4. Store patient digital twins and healthcare records in MongoDB.
+5. Integrate wearable devices through Android Health Connect.
+6. Ingest and process wearable health data using Apache Kafka.
+7. Create a Patient 360 dashboard for comprehensive patient monitoring.
+8. Manage patient consent and validate access to wearable health data.
+9. Detect abnormal vital measurements using configurable alert thresholds.
+10. Provide real-time doctor notifications through Kafka and Server-Sent Events (SSE).
+11. Provide AI-based cardiovascular and diabetes risk prediction.
+12. Apply federated learning so participating hospitals can train models without sharing raw patient training data.
+13. Provide explainable AI using SHAP and validated risk outputs.
+14. Maintain AI risk history and display risk trends for selected patients.
+15. Generate personalized care plan drafts based on patient risk predictions and predefined guideline rules.
+16. Enable healthcare providers to review and approve care plans.
+17. Track patient adherence to care plan interventions.
+18. Record and compare health outcome measurements over time.
 
 ## Key Features
 
@@ -45,6 +47,8 @@ It also provides AI-powered cardiovascular and diabetes risk prediction using fe
 - **Patient 360 Dashboard** --- Display patient profile, digital twin status, vitals, appointments, prescriptions, and doctors.
 
 - **Consent Management** --- Manage patient consent and require active `WEARABLE_DATA` consent for wearable ingestion.
+
+- **Authentication & RBAC** --- Provide JWT-based login and patient registration, with `PATIENT`, `DOCTOR`, and `ADMIN` roles, protected APIs, patient ownership checks, and doctor-assignment checks.
 
 - **Wearable Integration** --- Receive health data through `Android Health Connect`.
 
@@ -157,6 +161,114 @@ Patient 360
 The backend validates that the wearable is connected, assigned to the patient, the patient exists, and the required WEARABLE_DATA consent is active.
 
 The current real-device integration was tested with a `Redmi Watch 5 Lite` through `Mi Fitness` and `Health Connect`. Only values actually available from the data source are stored; unsupported measurements are not fabricated.
+
+## Technology Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React, Vite |
+| Backend | Spring Boot, Java |
+| AI Service | Python, FastAPI |
+| AI/ML | TensorFlow, TensorFlow Federated |
+| Explainability | SHAP |
+| Database | MongoDB |
+| Messaging | Apache Kafka |
+| Healthcare Interoperability | HL7 FHIR R4 |
+| FHIR Library | HAPI FHIR |
+| Mobile | Android, Kotlin, Jetpack Compose |
+| Health Data | Android Health Connect |
+| Backend Build | Maven |
+| Mobile Build | Gradle |
+
+## Key Project Versions
+
+| Component | Current Project Version / Configuration |
+|---|---|
+| Spring Boot | 4.1.1 |
+| Java | 20 compiler target |
+| JJWT | 0.12.6 |
+| HAPI FHIR | 8.10.1 |
+| React | 19.2.8 |
+| Vite | 8.2.2 |
+| Axios | 1.20.0 |
+| Python TensorFlow | 2.14.1 |
+| TensorFlow Federated | 0.64.0 |
+| SHAP | 0.45.1 |
+| Android Health Connect Client | 1.1.0 |
+| Android minimum SDK | 28 |
+| Android target SDK | 37 |
+
+## Project Structure
+
+```text
+MediSphere/
+├── AI/
+│   ├── app/
+│   │   ├── explainability/
+│   │   ├── federated/
+│   │   ├── models/
+│   │   └── validation/
+│   ├── data/
+│   ├── saved_models/
+│   ├── scripts/
+│   └── requirements.txt
+│
+├── Backend/
+│   └── src/
+│
+├── Frontend/
+│   └── src/
+│
+├── MediSphereMobile/
+│
+├── .gitignore
+└── README.md
+```
+
+## Authentication & Role-Based Access Control
+
+MediSphere includes stateless JWT authentication for the React frontend and Spring Boot backend.
+
+### Authentication Flow
+
+```text
+React Login / Register
+        ↓
+Spring Boot /api/auth
+        ↓
+BCrypt Password Verification
+        ↓
+JWT Generation
+        ↓
+React Stores Token
+        ↓
+Authorization: Bearer <JWT>
+        ↓
+JwtAuthenticationFilter
+        ↓
+Authenticated User + Role
+        ↓
+Protected Healthcare APIs
+```
+
+### Supported Roles
+
+| Role | Access Model |
+|---|---|
+| `PATIENT` | Access patient-specific healthcare data permitted by ownership rules |
+| `DOCTOR` | Access doctor functions and assigned-patient workflows |
+| `ADMIN` | Administrative and system-wide operations |
+
+The backend also applies ownership and assignment checks where required. For example, patients are restricted to their own protected records, while doctor access to patient-specific data can be restricted by doctor assignment.
+
+### Authentication APIs
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/auth/register` | Register a new patient account |
+| POST | `/api/auth/login` | Authenticate a patient, doctor, or administrator and return a JWT |
+
+JWT expiration is configured for 1 hour in the current backend configuration.
 
 ## FHIR Integration & Digital Twin
 
@@ -420,9 +532,9 @@ Risk Trend
 
 AI risk history is stored separately from the patient's core healthcare records.
 
-## AI Backend API
+### AI Backend API
 
-### Endpoint Reference
+#### Endpoint Reference
 The Spring Boot backend provides AI integration endpoints including:
 
 | Function | HTTP Method | Endpoint |
@@ -447,6 +559,7 @@ The FastAPI service runs on:
 ```powershell
 http://localhost:8001
 ```
+
 ## Real-Time Monitoring & Alerts
 
 Milestone 3 introduces real-time wearable vital monitoring, abnormal vital detection, and doctor notification capabilities.
@@ -585,7 +698,7 @@ Display Notification in Frontend
 
 ### Milestone 3 Validation
 
-The following functionality was implemented and tested:
+The following functionality is implemented in the current project:
 
 - Wearable vital event ingestion.
 - Kafka event consumption.
@@ -691,65 +804,21 @@ The following implementation checks were completed:
 
 Backend integration and persistence should be tested in the target environment before treating those behaviors as end-to-end verified.
 
-## Technology Stack
-
-| Layer | Technology |
-|---|---|
-| Frontend | React, Vite |
-| Backend | Spring Boot, Java |
-| AI Service | Python, FastAPI |
-| AI/ML | TensorFlow, TensorFlow Federated |
-| Explainability | SHAP |
-| Database | MongoDB |
-| Messaging | Apache Kafka |
-| Healthcare Interoperability | HL7 FHIR R4 |
-| FHIR Library | HAPI FHIR |
-| Mobile | Android, Kotlin, Jetpack Compose |
-| Health Data | Android Health Connect |
-| Backend Build | Maven |
-| Mobile Build | Gradle |
-
-## Project Structure
-
-```text
-MediSphere/
-├── AI/
-│   ├── app/
-│   │   ├── explainability/
-│   │   ├── federated/
-│   │   ├── models/
-│   │   └── validation/
-│   ├── data/
-│   ├── saved_models/
-│   ├── scripts/
-│   └── requirements.txt
-│
-├── Backend/
-│   └── src/
-│
-├── Frontend/
-│   └── src/
-│
-├── MediSphereMobile/
-│
-├── .gitignore
-└── README.md
-```
 ## Setup and Installation
 
 ### Prerequisites
-- Java 21
+- Java 20 (project compiler target)
 - MongoDB
 - Apache Kafka
 - Node.js and npm
-- Python 3.x
+- Python 3.x (compatible with the AI requirements)
 - Android Studio for the mobile application
 
 ### MongoDB
 
 The backend uses:
 ```powershell
-mongodb://localhost:27017/medisphere_db
+mongodb://localhost:27017/test
 ```
 
 Make sure MongoDB is running.
@@ -765,6 +834,23 @@ The wearable event topic is:
 ```powershell
 wearable-vitals
 ```
+
+### Backend Environment Variables
+
+The backend expects the JWT signing secret to be supplied through an environment variable:
+
+```powershell
+$env:JWT_SECRET = "<base64-encoded-secret>"
+```
+
+Do not commit JWT secrets, passwords, API keys, or other credentials to Git.
+
+The backend development configuration uses:
+- MongoDB: `mongodb://localhost:27017/test`
+- Spring Boot: `http://localhost:8080`
+- Kafka: `localhost:9092`
+- FastAPI AI service: `http://localhost:8001`
+- External FHIR server: `https://hapi.fhir.org/baseR4`
 
 ### Backend Setup
 
@@ -841,13 +927,21 @@ http://localhost:5173
 
 ### Android Application
 
-Open MediSphereMobile/ in Android Studio.
+Open `MediSphereMobile/` in Android Studio.
 
 The application uses:
 - Kotlin
 - Jetpack Compose
 - Android Health Connect
+- Health Connect Client 1.1.0
 - Minimum SDK 28
+- Target SDK 37
+
+The current mobile implementation requests Health Connect read access for:
+- Heart rate
+- Oxygen saturation
+
+The current backend submission flow sends the latest real heart-rate reading together with the MediSphere patient ID and wearable device ID. Unsupported or unavailable measurements remain `null` rather than being fabricated.
 
 For a physical Android device, ADB reverse port forwarding can expose the local backend:
 ```powershell
@@ -876,6 +970,7 @@ adb.exe -s <DEVICE_SERIAL> reverse tcp:8080 tcp:8080
 - Patient 360 view
 - Consent management
 - Privacy and access control
+- JWT authentication and role-based access control
 - Wearable device integration foundation
 - Kafka infrastructure setup
 - Healthcare event processing foundation
@@ -967,10 +1062,10 @@ adb.exe -s <DEVICE_SERIAL> reverse tcp:8080 tcp:8080
 
 ## Future Enhancements
 
-- Role-based authentication and authorization
+- Multi-factor authentication and refresh-token support
 - Advanced wearable integrations and support for additional vital measurements
 - Enhanced patient analytics and health outcome reporting
-- Improved alert prioritization and notification management
+- Improved alert prioritization, alert-fatigue prevention, and notification management
 - Support for additional FHIR R4 resources
 - Production-grade security, privacy, and cloud deployment
 - Automated testing and CI/CD pipelines
