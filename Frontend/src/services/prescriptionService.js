@@ -1,8 +1,28 @@
 const API_URL = "http://localhost:8080/api/prescriptions";
 
+// Get authentication headers
+const getAuthHeaders = (includeContentType = false) => {
+  const token = localStorage.getItem("token");
+
+  const headers = {};
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  if (includeContentType) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  return headers;
+};
+
 // Get all prescriptions
 export const getPrescriptions = async () => {
-  const response = await fetch(API_URL);
+  const response = await fetch(API_URL, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch prescriptions");
@@ -13,7 +33,10 @@ export const getPrescriptions = async () => {
 
 // Get prescriptions by patient ID
 export const getPrescriptionsByPatientId = async (patientId) => {
-  const response = await fetch(`${API_URL}/patient/${patientId}`);
+  const response = await fetch(`${API_URL}/patient/${patientId}`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch patient prescriptions");
@@ -24,7 +47,10 @@ export const getPrescriptionsByPatientId = async (patientId) => {
 
 // Get prescription by ID
 export const getPrescriptionById = async (id) => {
-  const response = await fetch(`${API_URL}/${id}`);
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch prescription");
@@ -37,9 +63,7 @@ export const getPrescriptionById = async (id) => {
 export const createPrescription = async (prescription) => {
   const response = await fetch(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: getAuthHeaders(true),
     body: JSON.stringify(prescription),
   });
 
@@ -54,9 +78,7 @@ export const createPrescription = async (prescription) => {
 export const updatePrescription = async (id, prescription) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: getAuthHeaders(true),
     body: JSON.stringify(prescription),
   });
 
@@ -71,6 +93,7 @@ export const updatePrescription = async (id, prescription) => {
 export const deletePrescription = async (id) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {

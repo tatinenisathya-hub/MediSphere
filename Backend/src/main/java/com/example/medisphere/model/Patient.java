@@ -29,9 +29,13 @@ public class Patient {
     @Email(message = "Invalid email format")
     private String email;
 
+    // Doctor assigned to this patient
+    private String doctorId;
+
     public Patient() {
     }
 
+    // Existing constructor retained for compatibility
     public Patient(
             String id,
             String name,
@@ -96,5 +100,13 @@ public class Patient {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(String doctorId) {
+        this.doctorId = doctorId;
     }
 }

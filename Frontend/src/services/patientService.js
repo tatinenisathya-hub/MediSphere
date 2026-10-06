@@ -1,8 +1,26 @@
 const API_URL = "http://localhost:8080/api/patients";
 
+// Add JWT token to authenticated requests
+const getAuthHeaders = (includeContentType = false) => {
+  const token = localStorage.getItem("token");
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  if (includeContentType) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  return headers;
+};
+
 // Get all patients
 export const getPatients = async () => {
-  const response = await fetch(API_URL);
+  const response = await fetch(API_URL, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch patients");
@@ -13,7 +31,10 @@ export const getPatients = async () => {
 
 // Get patient by ID
 export const getPatientById = async (id) => {
-  const response = await fetch(`${API_URL}/${id}`);
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch patient");
@@ -26,9 +47,7 @@ export const getPatientById = async (id) => {
 export const createPatient = async (patient) => {
   const response = await fetch(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: getAuthHeaders(true),
     body: JSON.stringify(patient),
   });
 
@@ -43,9 +62,7 @@ export const createPatient = async (patient) => {
 export const updatePatient = async (id, patient) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: getAuthHeaders(true),
     body: JSON.stringify(patient),
   });
 
@@ -60,6 +77,7 @@ export const updatePatient = async (id, patient) => {
 export const deletePatient = async (id) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {

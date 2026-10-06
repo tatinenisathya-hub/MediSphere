@@ -1,7 +1,13 @@
 package com.example.medisphere.service;
 
+import com.example.medisphere.model.Patient;
+import com.example.medisphere.model.Role;
+import com.example.medisphere.model.User;
 import com.example.medisphere.model.Vital;
+import com.example.medisphere.repository.PatientRepository;
 import com.example.medisphere.repository.VitalRepository;
+
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,75 +18,279 @@ import java.util.Optional;
 public class VitalService {
 
     private final VitalRepository vitalRepository;
+    private final PatientRepository patientRepository;
+    private final VitalAlertService vitalAlertService;
 
-    public VitalService(VitalRepository vitalRepository) {
+    public VitalService(
+            VitalRepository vitalRepository,
+            PatientRepository patientRepository,
+            VitalAlertService vitalAlertService
+    ) {
         this.vitalRepository = vitalRepository;
+        this.patientRepository = patientRepository;
+        this.vitalAlertService = vitalAlertService;
     }
 
-    public Vital createVital(Vital vital) {
+    // =========================================================
+    // CREATE VITAL
+    // =========================================================
+
+    public Vital createVital(Vital vital, User user) {
+
+        if (vital == null || vital.getPatientId() == null) {
+            throw new IllegalArgumentException(
+                    "Patient ID is required"
+            );
+        }
+
+        checkPatientAccess(user, vital.getPatientId());
 
         if (vital.getRecordedAt() == null) {
             vital.setRecordedAt(LocalDateTime.now());
         }
 
-        return vitalRepository.save(vital);
+        // Save the vital first so MongoDB generates its ID
+        Vital savedVital = vitalRepository.save(vital);
+
+        // Evaluate thresholds and generate alerts/notifications
+        vitalAlertService.evaluateVital(savedVital);
+
+        return savedVital;
     }
 
-    public List<Vital> getAllVitals() {
+    // =========================================================
+    // GET ALL VITALS
+    // ADMIN ONLY
+    // =========================================================
+
+    public List<Vital> getAllVitals(User user) {
+
+        requireRole(user, Role.ADMIN);
+
         return vitalRepository.findAll();
     }
 
-    // Patient-specific vital readings
-    // Latest readings appear first
-    public List<Vital> getVitalsByPatientId(String patientId) {
+    // =========================================================
+    // GET VITAL BY PATIENT
+    // ADMIN / ASSIGNED DOCTOR / OWN PATIENT
+    // =========================================================
 
-        return vitalRepository
-                .findByPatientIdOrderByRecordedAtDesc(patientId);
+    public List<Vital> getVitalsByPatientId(
+            String patientId,
+            User user
+    ) {
+
+        checkPatientAccess(user, patientId);
+
+        return vitalRepository.findByPatientId(patientId);
     }
 
-    public Optional<Vital> getVitalById(String id) {
-        return vitalRepository.findById(id);
-    }
+    // =========================================================
+    // GET VITAL BY ID
+    // ADMIN / ASSIGNED DOCTOR / OWN PATIENT
+    // =========================================================
 
-    public Vital updateVital(String id, Vital updatedVital) {
+    public Optional<Vital> getVitalById(
+            String id,
+            User user
+    ) {
 
-        return vitalRepository.findById(id)
-                .map(vital -> {
+        Optional<Vital> vital =
+                vitalRepository.findById(id);
 
-                    vital.setPatientId(updatedVital.getPatientId());
-                    vital.setHeartRate(updatedVital.getHeartRate());
-                    vital.setTemperature(updatedVital.getTemperature());
-
-                    vital.setSystolicBloodPressure(
-                            updatedVital.getSystolicBloodPressure()
-                    );
-
-                    vital.setDiastolicBloodPressure(
-                            updatedVital.getDiastolicBloodPressure()
-                    );
-
-                    vital.setOxygenSaturation(
-                            updatedVital.getOxygenSaturation()
-                    );
-
-                    vital.setRespiratoryRate(
-                            updatedVital.getRespiratoryRate()
-                    );
-
-                    vital.setRecordedAt(updatedVital.getRecordedAt());
-
-                    return vitalRepository.save(vital);
-                })
-                .orElse(null);
-    }
-
-    public boolean deleteVital(String id) {
-
-        if (vitalRepository.existsById(id)) {
-            vitalRepository.deleteById(id);
-            return true;
+        if (vital.isEmpty()) {
+            return Optional.empty();
         }
 
-        return false;
+        checkPatientAccess(
+                user,
+                vital.get().getPatientId()
+        );
+
+        return vital;
+    }
+
+    // =========================================================
+    // UPDATE VITAL
+    // ADMIN / ASSIGNED DOCTOR ONLY
+    // =========================================================
+
+    public Vital updateVital(
+            String id,
+            Vital updatedVital,
+            User user
+    ) {
+
+        Optional<Vital> existingVital =
+                vitalRepository.findById(id);
+
+        if (existingVital.isEmpty()) {
+            return null;
+        }
+
+        Vital vital = existingVital.get();
+
+        // Only ADMIN and DOCTOR can update
+        if (user.getRole() == Role.PATIENT) {
+            throw new AccessDeniedException(
+                    "Patients are not allowed to update vitals"
+            );
+        }
+
+        checkPatientAccess(
+                user,
+                vital.getPatientId()
+        );
+
+        // Prevent changing the vital to another patient's record
+        if (updatedVital.getPatientId() != null
+                && !vital.getPatientId()
+                .equals(updatedVital.getPatientId())) {
+
+            throw new AccessDeniedException(
+                    "A vital cannot be moved to another patient"
+            );
+        }
+
+        vital.setHeartRate(
+                updatedVital.getHeartRate()
+        );
+
+        vital.setTemperature(
+                updatedVital.getTemperature()
+        );
+
+        vital.setSystolicBloodPressure(
+                updatedVital.getSystolicBloodPressure()
+        );
+
+        vital.setDiastolicBloodPressure(
+                updatedVital.getDiastolicBloodPressure()
+        );
+
+        vital.setOxygenSaturation(
+                updatedVital.getOxygenSaturation()
+        );
+
+        vital.setRespiratoryRate(
+                updatedVital.getRespiratoryRate()
+        );
+
+        if (updatedVital.getRecordedAt() != null) {
+            vital.setRecordedAt(
+                    updatedVital.getRecordedAt()
+            );
+        }
+
+        return vitalRepository.save(vital);
+    }
+
+    // =========================================================
+    // DELETE VITAL
+    // ADMIN ONLY
+    // =========================================================
+
+    public boolean deleteVital(
+            String id,
+            User user
+    ) {
+
+        requireRole(user, Role.ADMIN);
+
+        if (!vitalRepository.existsById(id)) {
+            return false;
+        }
+
+        vitalRepository.deleteById(id);
+
+        return true;
+    }
+
+    // =========================================================
+    // PATIENT / DOCTOR ACCESS CHECK
+    // =========================================================
+
+    private void checkPatientAccess(
+            User user,
+            String patientId
+    ) {
+
+        if (user == null) {
+            throw new AccessDeniedException(
+                    "Authentication required"
+            );
+        }
+
+        // ADMIN can access everything
+        if (user.getRole() == Role.ADMIN) {
+            return;
+        }
+
+        // PATIENT can access only their own record
+        if (user.getRole() == Role.PATIENT) {
+
+            if (user.getPatientId() == null
+                    || !user.getPatientId()
+                    .equals(patientId)) {
+
+                throw new AccessDeniedException(
+                        "Patients can access only their own vitals"
+                );
+            }
+
+            return;
+        }
+
+        // DOCTOR can access only assigned patients
+        if (user.getRole() == Role.DOCTOR) {
+
+            if (user.getDoctorId() == null) {
+                throw new AccessDeniedException(
+                        "Doctor is not assigned"
+                );
+            }
+
+            Patient patient =
+                    patientRepository
+                            .findById(patientId)
+                            .orElseThrow(() ->
+                                    new AccessDeniedException(
+                                            "Patient not found"
+                                    )
+                            );
+
+            if (patient.getDoctorId() == null
+                    || !user.getDoctorId()
+                    .equals(patient.getDoctorId())) {
+
+                throw new AccessDeniedException(
+                        "Doctor is not assigned to this patient"
+                );
+            }
+
+            return;
+        }
+
+        throw new AccessDeniedException(
+                "Access denied"
+        );
+    }
+
+    // =========================================================
+    // ROLE CHECK
+    // =========================================================
+
+    private void requireRole(
+            User user,
+            Role requiredRole
+    ) {
+
+        if (user == null
+                || user.getRole() != requiredRole) {
+
+            throw new AccessDeniedException(
+                    "Access denied"
+            );
+        }
     }
 }

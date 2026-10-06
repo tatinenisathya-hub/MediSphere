@@ -1,4 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
+
 import "./App.css";
 
 import Sidebar from "./components/Sidebar";
@@ -19,72 +25,95 @@ import DoctorNotifications from "./pages/DoctorNotifications/DoctorNotifications
 import PatientMonitoring from "./components/PatientMonitoring";
 import CarePlansPage from "./pages/CarePlans/CarePlansPage";
 
-function App() {
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import ProtectedRoute from "./pages/auth/ProtectedRoute";
+import { useAuth } from "./context/AuthContext";
+
+const PAGE_ROLES = {
+  Dashboard: ["ADMIN", "DOCTOR", "PATIENT"],
+  Patients: ["ADMIN", "DOCTOR"],
+  "Patient 360": ["ADMIN", "DOCTOR", "PATIENT"],
+  Doctors: ["ADMIN", "DOCTOR", "PATIENT"],
+  Appointments: ["ADMIN", "DOCTOR", "PATIENT"],
+  Prescriptions: ["ADMIN", "DOCTOR", "PATIENT"],
+  "FHIR Integration": ["ADMIN", "DOCTOR", "PATIENT"],
+  Vitals: ["ADMIN", "DOCTOR", "PATIENT"],
+  "Laboratory Results": ["ADMIN", "DOCTOR", "PATIENT"],
+  Consent: ["ADMIN", "PATIENT"],
+  "AI Risk Prediction": ["ADMIN", "DOCTOR", "PATIENT"],
+  "Vital Alerts": ["ADMIN", "DOCTOR", "PATIENT"],
+  "Doctor Notifications": ["ADMIN", "DOCTOR"],
+  "Patient Monitoring": ["ADMIN", "DOCTOR"],
+  "Care Plans & Treatment": ["ADMIN", "DOCTOR", "PATIENT"],
+};
+
+const PAGE_COMPONENTS = {
+  Dashboard,
+  Patients: PatientPage,
+  "Patient 360": Patient360Page,
+  Doctors: DoctorPage,
+  Appointments: AppointmentPage,
+  Prescriptions: PrescriptionPage,
+  "FHIR Integration": FhirPage,
+  Vitals: VitalsPage,
+  "Laboratory Results": LaboratoryPage,
+  Consent: ConsentPage,
+  "AI Risk Prediction": AIRiskPredictionPage,
+  "Vital Alerts": VitalAlerts,
+  "Doctor Notifications": DoctorNotifications,
+  "Patient Monitoring": PatientMonitoring,
+  "Care Plans & Treatment": CarePlansPage,
+};
+
+function HomePage() {
+  const { user } = useAuth();
   const [activePage, setActivePage] = useState("Dashboard");
 
-  const renderPage = () => {
-    switch (activePage) {
-      case "Dashboard":
-        return <Dashboard setActivePage={setActivePage} />;
+  const allowedPages = Object.keys(PAGE_ROLES).filter((page) =>
+    PAGE_ROLES[page].includes(user.role)
+  );
 
-      case "Patients":
-        return <PatientPage />;
-
-      case "Doctors":
-        return <DoctorPage />;
-
-      case "Appointments":
-        return <AppointmentPage />;
-
-      case "Prescriptions":
-        return <PrescriptionPage />;
-
-      case "FHIR Integration":
-        return <FhirPage />;
-
-      case "Vitals":
-        return <VitalsPage />;
-
-      case "Patient 360":
-        return <Patient360Page />;
-
-      case "Consent":
-        return <ConsentPage />;
-
-      case "Laboratory Results":
-        return <LaboratoryPage />;
-      
-      case "AI Risk Prediction":
-        return <AIRiskPredictionPage />;
-
-      case "Vital Alerts":
-        return <VitalAlerts />;
-
-      case "Doctor Notifications":
-        return <DoctorNotifications />;
-
-      case "Patient Monitoring":
-        return <PatientMonitoring />;
-
-      case "Care Plans & Treatment":
-        return <CarePlansPage />;
-
-      default:
-        return <Dashboard setActivePage={setActivePage} />;
+  useEffect(() => {
+    if (!allowedPages.includes(activePage)) {
+      setActivePage("Dashboard");
     }
-  };
+  }, [activePage, user.role]);
+
+  const PageComponent =
+    PAGE_COMPONENTS[allowedPages.includes(activePage) ? activePage : "Dashboard"];
 
   return (
     <div className="app-container">
       <Sidebar
         activePage={activePage}
         setActivePage={setActivePage}
+        role={user.role}
       />
 
       <main className="main-content">
-        {renderPage()}
+        <PageComponent setActivePage={setActivePage} />
       </main>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      <Route element={<ProtectedRoute allowedRoles={[
+        "ADMIN",
+        "DOCTOR",
+        "PATIENT",
+      ]} />}>
+        <Route path="/" element={<HomePage />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 

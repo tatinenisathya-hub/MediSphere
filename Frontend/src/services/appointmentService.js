@@ -1,8 +1,28 @@
 const API_URL = "http://localhost:8080/api/appointments";
 
+// Get authentication headers
+const getAuthHeaders = (includeContentType = false) => {
+  const token = localStorage.getItem("token");
+
+  const headers = {};
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  if (includeContentType) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  return headers;
+};
+
 // Get all appointments
 export const getAppointments = async () => {
-  const response = await fetch(API_URL);
+  const response = await fetch(API_URL, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch appointments");
@@ -13,7 +33,10 @@ export const getAppointments = async () => {
 
 // Get appointments by patient ID
 export const getAppointmentsByPatientId = async (patientId) => {
-  const response = await fetch(`${API_URL}/patient/${patientId}`);
+  const response = await fetch(`${API_URL}/patient/${patientId}`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch patient appointments");
@@ -24,7 +47,10 @@ export const getAppointmentsByPatientId = async (patientId) => {
 
 // Get appointment by ID
 export const getAppointmentById = async (id) => {
-  const response = await fetch(`${API_URL}/${id}`);
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch appointment");
@@ -37,9 +63,7 @@ export const getAppointmentById = async (id) => {
 export const createAppointment = async (appointment) => {
   const response = await fetch(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: getAuthHeaders(true),
     body: JSON.stringify(appointment),
   });
 
@@ -54,9 +78,7 @@ export const createAppointment = async (appointment) => {
 export const updateAppointment = async (id, appointment) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: getAuthHeaders(true),
     body: JSON.stringify(appointment),
   });
 
@@ -71,6 +93,7 @@ export const updateAppointment = async (id, appointment) => {
 export const deleteAppointment = async (id) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {

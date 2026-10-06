@@ -1,8 +1,11 @@
 package com.example.medisphere.controller;
 
+import com.example.medisphere.model.User;
 import com.example.medisphere.service.FhirPatientService;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,7 +17,6 @@ public class FhirPatientController {
 
     public FhirPatientController(
             FhirPatientService fhirPatientService) {
-
         this.fhirPatientService = fhirPatientService;
     }
 
@@ -27,12 +29,19 @@ public class FhirPatientController {
             produces = "application/fhir+json"
     )
     public ResponseEntity<String> getFhirPatient(
-            @PathVariable String id) {
+            @PathVariable String id,
+            Authentication authentication) {
+
+        if (authentication == null
+                || !(authentication.getPrincipal() instanceof User)) {
+            return ResponseEntity.status(401).build();
+        }
+
+        User user = (User) authentication.getPrincipal();
 
         try {
-
             String fhirPatient =
-                    fhirPatientService.getFhirPatient(id);
+                    fhirPatientService.getFhirPatient(id, user);
 
             return ResponseEntity.ok()
                     .contentType(
@@ -42,11 +51,11 @@ public class FhirPatientController {
                     )
                     .body(fhirPatient);
 
-        } catch (RuntimeException error) {
+        } catch (SecurityException error) {
+            return ResponseEntity.status(403).build();
 
-            return ResponseEntity
-                    .notFound()
-                    .build();
+        } catch (RuntimeException error) {
+            return ResponseEntity.notFound().build();
         }
     }
 }

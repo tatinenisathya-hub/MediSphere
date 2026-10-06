@@ -1,9 +1,23 @@
 const API_URL = "http://localhost:8080/api/vitals";
 const PATIENT_API_URL = "http://localhost:8080/api/patients";
 
+// Get JWT token
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("token");
+
+  return {
+    Authorization: `Bearer ${token}`,
+  };
+};
+
 // Get all vitals
 export const getAllVitals = async () => {
-  const response = await fetch(API_URL);
+  const response = await fetch(API_URL, {
+    method: "GET",
+    headers: {
+      ...getAuthHeaders(),
+    },
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch vitals");
@@ -14,7 +28,12 @@ export const getAllVitals = async () => {
 
 // Get vitals by patient ID
 export const getVitalsByPatientId = async (patientId) => {
-  const response = await fetch(`${API_URL}/patient/${patientId}`);
+  const response = await fetch(`${API_URL}/patient/${patientId}`, {
+    method: "GET",
+    headers: {
+      ...getAuthHeaders(),
+    },
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch patient vitals");
@@ -29,6 +48,7 @@ export const createVitals = async (vitalsData) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...getAuthHeaders(),
     },
     body: JSON.stringify(vitalsData),
   });
@@ -46,6 +66,7 @@ export const updateVitals = async (id, vitalsData) => {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      ...getAuthHeaders(),
     },
     body: JSON.stringify(vitalsData),
   });
@@ -61,6 +82,9 @@ export const updateVitals = async (id, vitalsData) => {
 export const deleteVitals = async (id) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
+    headers: {
+      ...getAuthHeaders(),
+    },
   });
 
   if (!response.ok) {
@@ -72,7 +96,12 @@ export const deleteVitals = async (id) => {
 
 // Get all patients
 export const getAllPatients = async () => {
-  const response = await fetch(PATIENT_API_URL);
+  const response = await fetch(PATIENT_API_URL, {
+    method: "GET",
+    headers: {
+      ...getAuthHeaders(),
+    },
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch patients");

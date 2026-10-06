@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.medisphere.model.User;
 import com.example.medisphere.model.VitalAlert;
 import com.example.medisphere.service.VitalAlertService;
 
@@ -22,44 +24,77 @@ public class VitalAlertController {
         this.vitalAlertService = vitalAlertService;
     }
 
+    // =========================================================
+    // GET ALL ALERTS
+    // =========================================================
+
     @GetMapping
-    public ResponseEntity<List<VitalAlert>> getAllAlerts() {
+    public ResponseEntity<List<VitalAlert>> getAllAlerts(
+            Authentication authentication) {
+
+        User user = (User) authentication.getPrincipal();
 
         return ResponseEntity.ok(
-                vitalAlertService.getAllAlerts()
+                vitalAlertService.getAllAlerts(user)
         );
     }
+
+    // =========================================================
+    // GET ALERTS BY PATIENT
+    // =========================================================
 
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<List<VitalAlert>> getAlertsByPatientId(
-            @PathVariable String patientId) {
+            @PathVariable String patientId,
+            Authentication authentication) {
+
+        User user = (User) authentication.getPrincipal();
 
         return ResponseEntity.ok(
-                vitalAlertService.getAlertsByPatientId(patientId)
+                vitalAlertService.getAlertsByPatientId(
+                        patientId,
+                        user
+                )
         );
     }
+
+    // =========================================================
+    // GET OPEN ALERTS
+    // =========================================================
 
     @GetMapping("/open")
-    public ResponseEntity<List<VitalAlert>> getOpenAlerts() {
+    public ResponseEntity<List<VitalAlert>> getOpenAlerts(
+            Authentication authentication) {
+
+        User user = (User) authentication.getPrincipal();
 
         return ResponseEntity.ok(
-                vitalAlertService.getOpenAlerts()
+                vitalAlertService.getOpenAlerts(user)
         );
     }
+
+    // =========================================================
+    // UPDATE ALERT STATUS
+    // =========================================================
 
     @PatchMapping("/{alertId}/status")
     public ResponseEntity<VitalAlert> updateAlertStatus(
             @PathVariable String alertId,
-            @RequestParam String status) {
+            @RequestParam String status,
+            Authentication authentication) {
+
+        User user = (User) authentication.getPrincipal();
 
         VitalAlert updatedAlert =
                 vitalAlertService.updateAlertStatus(
                         alertId,
-                        status
+                        status,
+                        user
                 );
 
         if (updatedAlert == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
                     .build();
         }
 

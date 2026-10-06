@@ -5,6 +5,32 @@ const EXTERNAL_FHIR_API_URL =
   "http://localhost:8080/api/fhir/external";
 
 
+// =====================================================
+// AUTHENTICATION HELPER
+// =====================================================
+
+const getAuthHeaders = (includeContentType = false) => {
+
+  const token = localStorage.getItem("token");
+
+  const headers = {
+    Accept: "application/fhir+json",
+  };
+
+  if (includeContentType) {
+    headers["Content-Type"] =
+      "application/fhir+json";
+  }
+
+  if (token) {
+    headers.Authorization =
+      `Bearer ${token}`;
+  }
+
+  return headers;
+};
+
+
 // ===============================
 // FHIR PATIENT
 // ===============================
@@ -16,14 +42,25 @@ export const getFhirPatient =
       await fetch(
         `${API_URL}/Patient/${encodeURIComponent(id)}`,
         {
-          headers: {
-            Accept:
-              "application/fhir+json",
-          },
+          method: "GET",
+          headers: getAuthHeaders(),
         }
       );
 
     if (!response.ok) {
+
+      if (response.status === 401) {
+        throw new Error(
+          "Authentication required. Please login again."
+        );
+      }
+
+      if (response.status === 403) {
+        throw new Error(
+          "You are not authorized to access this FHIR Patient."
+        );
+      }
+
       throw new Error(
         "Failed to fetch FHIR Patient"
       );
@@ -44,14 +81,25 @@ export const getFhirPractitioner =
       await fetch(
         `${API_URL}/Practitioner/${encodeURIComponent(id)}`,
         {
-          headers: {
-            Accept:
-              "application/fhir+json",
-          },
+          method: "GET",
+          headers: getAuthHeaders(),
         }
       );
 
     if (!response.ok) {
+
+      if (response.status === 401) {
+        throw new Error(
+          "Authentication required. Please login again."
+        );
+      }
+
+      if (response.status === 403) {
+        throw new Error(
+          "You are not authorized to access this FHIR Practitioner."
+        );
+      }
+
       throw new Error(
         "Failed to fetch FHIR Practitioner"
       );
@@ -72,14 +120,25 @@ export const getFhirAppointment =
       await fetch(
         `${API_URL}/Appointment/${encodeURIComponent(id)}`,
         {
-          headers: {
-            Accept:
-              "application/fhir+json",
-          },
+          method: "GET",
+          headers: getAuthHeaders(),
         }
       );
 
     if (!response.ok) {
+
+      if (response.status === 401) {
+        throw new Error(
+          "Authentication required. Please login again."
+        );
+      }
+
+      if (response.status === 403) {
+        throw new Error(
+          "You are not authorized to access this FHIR Appointment."
+        );
+      }
+
       throw new Error(
         "Failed to fetch FHIR Appointment"
       );
@@ -100,14 +159,25 @@ export const getFhirMedicationRequest =
       await fetch(
         `${API_URL}/MedicationRequest/${encodeURIComponent(id)}`,
         {
-          headers: {
-            Accept:
-              "application/fhir+json",
-          },
+          method: "GET",
+          headers: getAuthHeaders(),
         }
       );
 
     if (!response.ok) {
+
+      if (response.status === 401) {
+        throw new Error(
+          "Authentication required. Please login again."
+        );
+      }
+
+      if (response.status === 403) {
+        throw new Error(
+          "You are not authorized to access this FHIR Medication Request."
+        );
+      }
+
       throw new Error(
         "Failed to fetch FHIR Medication Request"
       );
@@ -128,14 +198,25 @@ export const getFhirObservation =
       await fetch(
         `${API_URL}/Observation/vital/${encodeURIComponent(id)}`,
         {
-          headers: {
-            Accept:
-              "application/fhir+json",
-          },
+          method: "GET",
+          headers: getAuthHeaders(),
         }
       );
 
     if (!response.ok) {
+
+      if (response.status === 401) {
+        throw new Error(
+          "Authentication required. Please login again."
+        );
+      }
+
+      if (response.status === 403) {
+        throw new Error(
+          "You are not authorized to access this FHIR Observation."
+        );
+      }
+
       throw new Error(
         "Failed to fetch FHIR Observation"
       );
@@ -161,13 +242,8 @@ export const createExternalFhirResource =
         {
           method: "POST",
 
-          headers: {
-            "Content-Type":
-              "application/fhir+json",
-
-            Accept:
-              "application/fhir+json",
-          },
+          headers:
+            getAuthHeaders(true),
 
           body:
             JSON.stringify(resource),
@@ -180,16 +256,32 @@ export const createExternalFhirResource =
     let responseData;
 
     try {
+
       responseData =
         responseText
           ? JSON.parse(responseText)
           : null;
+
     } catch {
+
       responseData =
         responseText;
+
     }
 
     if (!response.ok) {
+
+      if (response.status === 401) {
+        throw new Error(
+          "Authentication required. Please login again."
+        );
+      }
+
+      if (response.status === 403) {
+        throw new Error(
+          "You are not authorized to access the external FHIR service."
+        );
+      }
 
       const message =
         typeof responseData === "string"
@@ -220,10 +312,8 @@ export const getExternalFhirResource =
           resourceId
         )}`,
         {
-          headers: {
-            Accept:
-              "application/fhir+json",
-          },
+          method: "GET",
+          headers: getAuthHeaders(),
         }
       );
 
@@ -233,16 +323,32 @@ export const getExternalFhirResource =
     let responseData;
 
     try {
+
       responseData =
         responseText
           ? JSON.parse(responseText)
           : null;
+
     } catch {
+
       responseData =
         responseText;
+
     }
 
     if (!response.ok) {
+
+      if (response.status === 401) {
+        throw new Error(
+          "Authentication required. Please login again."
+        );
+      }
+
+      if (response.status === 403) {
+        throw new Error(
+          "You are not authorized to access the external FHIR service."
+        );
+      }
 
       const message =
         typeof responseData === "string"
