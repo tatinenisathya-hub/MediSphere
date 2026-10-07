@@ -2,12 +2,9 @@ import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import LaboratoryForm from "./LaboratoryForm";
 import LaboratoryList from "./LaboratoryList";
-import {
-  getAllLabResults,
-} from "../../services/laboratoryService";
+import { getAllLabResults } from "../../services/laboratoryService";
+import { getPatients } from "../../services/patientService";
 import "./Laboratory.css";
-
-const PATIENT_API_URL = "http://localhost:8080/api/patients";
 
 function LaboratoryPage() {
   const [results, setResults] = useState([]);
@@ -26,17 +23,10 @@ function LaboratoryPage() {
       setLoading(true);
       setError("");
 
-      const [labResponse, patientResponse] =
-        await Promise.all([
-          getAllLabResults(),
-          fetch(PATIENT_API_URL),
-        ]);
-
-      if (!patientResponse.ok) {
-        throw new Error("Unable to load patients");
-      }
-
-      const patientData = await patientResponse.json();
+      const [labResponse, patientData] = await Promise.all([
+        getAllLabResults(),
+        getPatients(),
+      ]);
 
       setResults(
         Array.isArray(labResponse)

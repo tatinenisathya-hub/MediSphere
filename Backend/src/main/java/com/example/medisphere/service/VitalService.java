@@ -11,6 +11,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,14 +61,70 @@ public class VitalService {
 
     // =========================================================
     // GET ALL VITALS
-    // ADMIN ONLY
+    // ADMIN / ASSIGNED DOCTOR
     // =========================================================
 
     public List<Vital> getAllVitals(User user) {
 
-        requireRole(user, Role.ADMIN);
+        if (user == null) {
+            throw new AccessDeniedException(
+                    "Authentication required"
+            );
+        }
 
-        return vitalRepository.findAll();
+        // -----------------------------------------------------
+        // ADMIN
+        // -----------------------------------------------------
+        // Admin can view all vital records.
+        if (user.getRole() == Role.ADMIN) {
+            return vitalRepository.findAll();
+        }
+
+        // -----------------------------------------------------
+        // DOCTOR
+        // -----------------------------------------------------
+        // Doctor can view vitals only for patients assigned
+        // to that doctor.
+        if (user.getRole() == Role.DOCTOR) {
+
+            if (user.getDoctorId() == null) {
+                throw new AccessDeniedException(
+                        "Doctor is not assigned"
+                );
+            }
+
+            List<Patient> assignedPatients =
+                    patientRepository.findAll()
+                            .stream()
+                            .filter(patient ->
+                                    user.getDoctorId()
+                                            .equals(patient.getDoctorId())
+                            )
+                            .toList();
+
+            List<Vital> doctorVitals =
+                    new ArrayList<>();
+
+            for (Patient patient : assignedPatients) {
+
+                doctorVitals.addAll(
+                        vitalRepository.findByPatientId(
+                                patient.getId()
+                        )
+                );
+            }
+
+            return doctorVitals;
+        }
+
+        // -----------------------------------------------------
+        // PATIENT
+        // -----------------------------------------------------
+        // Patients should use the patient-specific endpoint
+        // instead of requesting all vital records.
+        throw new AccessDeniedException(
+                "Patients cannot access all vital records"
+        );
     }
 
     // =========================================================
@@ -221,12 +278,18 @@ public class VitalService {
             );
         }
 
-        // ADMIN can access everything
+        // -----------------------------------------------------
+        // ADMIN
+        // -----------------------------------------------------
+        // Admin can access everything.
         if (user.getRole() == Role.ADMIN) {
             return;
         }
 
-        // PATIENT can access only their own record
+        // -----------------------------------------------------
+        // PATIENT
+        // -----------------------------------------------------
+        // Patient can access only their own record.
         if (user.getRole() == Role.PATIENT) {
 
             if (user.getPatientId() == null
@@ -241,7 +304,10 @@ public class VitalService {
             return;
         }
 
-        // DOCTOR can access only assigned patients
+        // -----------------------------------------------------
+        // DOCTOR
+        // -----------------------------------------------------
+        // Doctor can access only assigned patients.
         if (user.getRole() == Role.DOCTOR) {
 
             if (user.getDoctorId() == null) {

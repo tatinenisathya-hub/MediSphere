@@ -1,9 +1,10 @@
-
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { getAllDoctorNotifications } from "../../services/doctorNotificationService";
+
 import "./DoctorNotifications.css";
 
-const API_URL = "http://localhost:8080/api/doctor-notifications";
 const SSE_URL = "http://localhost:8080/api/notifications/stream";
+
 
 // =====================================
 // HELPER FUNCTIONS
@@ -18,6 +19,7 @@ const getNotificationId = (notification) => {
   );
 };
 
+
 const getNotificationDate = (notification) => {
   return (
     notification.createdAt ||
@@ -26,6 +28,7 @@ const getNotificationDate = (notification) => {
     0
   );
 };
+
 
 const mergeNotifications = (
   existingNotifications,
@@ -63,6 +66,7 @@ const mergeNotifications = (
   );
 };
 
+
 // =====================================
 // COMPONENT
 // =====================================
@@ -73,6 +77,7 @@ const DoctorNotifications = () => {
   const [loading, setLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState("");
+
 
   // =====================================
   // FETCH NOTIFICATIONS FROM BACKEND
@@ -87,21 +92,7 @@ const DoctorNotifications = () => {
           setLoading(true);
         }
 
-        const response = await fetch(API_URL, {
-          method: "GET",
-          cache: "no-store",
-          headers: {
-            Accept: "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch notifications: ${response.status}`
-          );
-        }
-
-        const data = await response.json();
+        const data = await getAllDoctorNotifications();
 
         const apiNotifications = Array.isArray(data) ? data : [];
 
@@ -126,6 +117,7 @@ const DoctorNotifications = () => {
     []
   );
 
+
   // =====================================
   // INITIAL FETCH + POLLING
   // =====================================
@@ -141,6 +133,7 @@ const DoctorNotifications = () => {
       clearInterval(interval);
     };
   }, [fetchNotifications]);
+
 
   // =====================================
   // REAL-TIME SSE CONNECTION
@@ -211,6 +204,7 @@ const DoctorNotifications = () => {
     };
   }, []);
 
+
   // =====================================
   // FILTER NOTIFICATIONS
   // =====================================
@@ -225,6 +219,7 @@ const DoctorNotifications = () => {
         notification.severity?.toUpperCase() === filter
     );
   }, [notifications, filter]);
+
 
   // =====================================
   // NOTIFICATION COUNTS
@@ -245,6 +240,7 @@ const DoctorNotifications = () => {
       notification.severity?.toUpperCase() === "LOW"
   ).length;
 
+
   // =====================================
   // FORMAT DATE
   // =====================================
@@ -263,6 +259,7 @@ const DoctorNotifications = () => {
     return parsedDate.toLocaleString();
   };
 
+
   // =====================================
   // GET SEVERITY CSS CLASS
   // =====================================
@@ -270,6 +267,7 @@ const DoctorNotifications = () => {
   const getSeverityClass = (severity) => {
     return severity?.toLowerCase() || "unknown";
   };
+
 
   // =====================================
   // RENDER COMPONENT
@@ -302,6 +300,7 @@ const DoctorNotifications = () => {
         </button>
       </div>
 
+
       {/* =====================================
           NOTIFICATION STATISTICS
       ===================================== */}
@@ -329,6 +328,7 @@ const DoctorNotifications = () => {
         </div>
 
       </div>
+
 
       {/* =====================================
           FILTER BUTTONS
@@ -378,6 +378,7 @@ const DoctorNotifications = () => {
 
       </div>
 
+
       {/* =====================================
           LOADING AND ERROR MESSAGES
       ===================================== */}
@@ -401,6 +402,7 @@ const DoctorNotifications = () => {
             No notifications found.
           </div>
         )}
+
 
       {/* =====================================
           NOTIFICATION LIST
@@ -431,6 +433,7 @@ const DoctorNotifications = () => {
               <div className="notification-card-header">
 
                 <div>
+
                   <h3>
                     {notification.vitalType ||
                       "UNKNOWN VITAL"}
@@ -441,6 +444,7 @@ const DoctorNotifications = () => {
                     {notification.patientId ||
                       "Not available"}
                   </span>
+
                 </div>
 
                 <span
@@ -450,6 +454,7 @@ const DoctorNotifications = () => {
                 </span>
 
               </div>
+
 
               {/* =====================================
                   MEASURED VALUE
@@ -466,6 +471,7 @@ const DoctorNotifications = () => {
 
               </div>
 
+
               {/* =====================================
                   ALERT MESSAGE
               ===================================== */}
@@ -476,6 +482,7 @@ const DoctorNotifications = () => {
                   "No alert message available."}
 
               </p>
+
 
               {/* =====================================
                   NOTIFICATION DETAILS
@@ -497,7 +504,7 @@ const DoctorNotifications = () => {
                   <strong>Received At:</strong>{" "}
                   {formatDate(
                     notification.receivedAt ||
-                      notification.createdAt
+                    notification.createdAt
                   )}
                 </p>
 
@@ -505,6 +512,7 @@ const DoctorNotifications = () => {
 
             </div>
           );
+
         })}
 
       </div>

@@ -26,6 +26,7 @@ public class Patient360Service {
 
     private final PatientRepository patientRepository;
     private final PatientTwinRepository patientTwinRepository;
+    private final PatientTwinService patientTwinService;
     private final AppointmentRepository appointmentRepository;
     private final PrescriptionRepository prescriptionRepository;
     private final VitalRepository vitalRepository;
@@ -34,6 +35,7 @@ public class Patient360Service {
     public Patient360Service(
             PatientRepository patientRepository,
             PatientTwinRepository patientTwinRepository,
+            PatientTwinService patientTwinService,
             AppointmentRepository appointmentRepository,
             PrescriptionRepository prescriptionRepository,
             VitalRepository vitalRepository,
@@ -41,6 +43,7 @@ public class Patient360Service {
 
         this.patientRepository = patientRepository;
         this.patientTwinRepository = patientTwinRepository;
+        this.patientTwinService = patientTwinService;
         this.appointmentRepository = appointmentRepository;
         this.prescriptionRepository = prescriptionRepository;
         this.vitalRepository = vitalRepository;
@@ -63,12 +66,34 @@ public class Patient360Service {
 
 
         // -----------------------------
-        // Get Patient Twin
+        // Refresh Patient Digital Twin
         // -----------------------------
 
-        PatientTwin patientTwin = patientTwinRepository
+        PatientTwin patientTwin;
+
+        if (patientTwinRepository
                 .findByPatientId(patientId)
-                .orElse(null);
+                .isPresent()) {
+
+            /*
+             * The Digital Twin already exists.
+             *
+             * Refresh it so appointmentIds,
+             * prescriptionIds and vitalIds
+             * represent the latest MongoDB data.
+             */
+            patientTwin = patientTwinService
+                    .refreshPatientTwin(patientId);
+
+        } else {
+
+            /*
+             * If a Digital Twin does not exist,
+             * create it from the current patient data.
+             */
+            patientTwin = patientTwinService
+                    .generatePatientTwin(patientId);
+        }
 
 
         // -----------------------------
@@ -159,14 +184,12 @@ public class Patient360Service {
         // -----------------------------
 
         return new Patient360Response(
-
                 patient,
                 patientTwin,
                 appointments,
                 prescriptions,
                 vitals,
                 doctors
-
         );
     }
 }

@@ -25,7 +25,9 @@ public class ConsentService {
     }
 
 
+    // =========================================================
     // Grant consent
+    // =========================================================
     public Consent grantConsent(Consent consent) {
 
         Patient patient = patientRepository
@@ -37,6 +39,22 @@ public class ConsentService {
                         )
                 );
 
+        /*
+         * Prevent duplicate ACTIVE consent for the same
+         * patient and consent type.
+         */
+        List<Consent> existingActiveConsents =
+                consentRepository
+                        .findByPatientIdAndConsentTypeAndStatus(
+                                consent.getPatientId(),
+                                consent.getConsentType(),
+                                "ACTIVE"
+                        );
+
+        if (!existingActiveConsents.isEmpty()) {
+            return existingActiveConsents.get(0);
+        }
+
         consent.setStatus("ACTIVE");
         consent.setGrantedAt(LocalDateTime.now());
         consent.setRevokedAt(null);
@@ -45,7 +63,9 @@ public class ConsentService {
     }
 
 
+    // =========================================================
     // Get all patient consents
+    // =========================================================
     public List<Consent> getPatientConsents(
             String patientId) {
 
@@ -54,7 +74,9 @@ public class ConsentService {
     }
 
 
+    // =========================================================
     // Revoke consent
+    // =========================================================
     public Consent revokeConsent(String consentId) {
 
         Consent consent = consentRepository
@@ -73,17 +95,21 @@ public class ConsentService {
     }
 
 
+    // =========================================================
     // Check active consent
+    // =========================================================
     public boolean hasActiveConsent(
             String patientId,
             String consentType) {
 
-        return consentRepository
-                .findByPatientIdAndConsentTypeAndStatus(
-                        patientId,
-                        consentType,
-                        "ACTIVE"
-                )
-                .isPresent();
+        List<Consent> activeConsents =
+                consentRepository
+                        .findByPatientIdAndConsentTypeAndStatus(
+                                patientId,
+                                consentType,
+                                "ACTIVE"
+                        );
+
+        return !activeConsents.isEmpty();
     }
 }

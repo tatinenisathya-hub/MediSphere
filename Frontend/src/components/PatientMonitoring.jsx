@@ -1,9 +1,20 @@
-
 import React, { useCallback, useEffect, useState } from "react";
 
 const VITALS_API_URL = "http://localhost:8080/api/vitals";
 const ALERTS_API_URL = "http://localhost:8080/api/alerts";
 const SSE_URL = "http://localhost:8080/api/notifications/stream";
+
+// ==========================================
+// AUTHENTICATION HEADERS
+// ==========================================
+
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("token");
+
+  return {
+    Authorization: `Bearer ${token}`,
+  };
+};
 
 const PatientMonitoring = () => {
   const [patientIdInput, setPatientIdInput] = useState("");
@@ -32,7 +43,11 @@ const PatientMonitoring = () => {
       setError("");
 
       const response = await fetch(
-        `${VITALS_API_URL}/patient/${encodeURIComponent(patientId)}`
+        `${VITALS_API_URL}/patient/${encodeURIComponent(patientId)}`,
+        {
+          method: "GET",
+          headers: getAuthHeaders(),
+        }
       );
 
       if (!response.ok) {
@@ -73,7 +88,11 @@ const PatientMonitoring = () => {
       setAlertError("");
 
       const response = await fetch(
-        `${ALERTS_API_URL}/patient/${encodeURIComponent(patientId)}`
+        `${ALERTS_API_URL}/patient/${encodeURIComponent(patientId)}`,
+        {
+          method: "GET",
+          headers: getAuthHeaders(),
+        }
       );
 
       if (!response.ok) {
@@ -153,136 +172,295 @@ const PatientMonitoring = () => {
   ]);
 
   // ==========================================
-  // REAL-TIME SSE PATIENT NOTIFICATIONS
-  // ==========================================
+// REAL-TIME SSE PATIENT NOTIFICATIONS
+// ==========================================
 
-  useEffect(() => {
-    if (!selectedPatientId) {
-      setSseConnected(false);
-      return;
-    }
+useEffect(() => {
+  if (!selectedPatientId) {
+    setSseConnected(false);
+    return;
+  }
 
-    const eventSource = new EventSource(SSE_URL);
+  let isActive = true;
+  let reader = null;
 
-    const handleDoctorNotification = (event) => {
-      try {
-        const notification = JSON.parse(event.data);
+  const connectToSSE = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-        console.log(
-          "SSE notification received:",
-          notification
-        );
-
-        // Display notifications only for the selected patient
-        if (
-          String(notification.patientId) !==
-          String(selectedPatientId)
-        ) {
-          return;
-        }
-
-        const realtimeAlert = {
-          id:
-            notification.alertId ||
-            notification.notificationId,
-
-          alertId: notification.alertId,
-
-          notificationId: notification.notificationId,
-
-          patientId: notification.patientId,
-
-          vitalType: notification.vitalType,
-
-          measuredValue: notification.measuredValue,
-
-          unit: notification.unit,
-
-          severity: notification.severity,
-
-          message: notification.message,
-
-          recordedAt: notification.recordedAt,
-
-          createdAt: notification.createdAt,
-
-          status: notification.status || "OPEN",
-        };
-
-        setAlerts((previousAlerts) => {
-          const notificationId =
-            realtimeAlert.notificationId;
-
-          const alertId = realtimeAlert.alertId;
-
-          const alreadyExists = previousAlerts.some(
-            (alert) => {
-              const sameAlertId =
-                alertId &&
-                (alert.alertId === alertId ||
-                  alert.id === alertId);
-
-              const sameNotificationId =
-                notificationId &&
-                alert.notificationId === notificationId;
-
-              return (
-                sameAlertId || sameNotificationId
-              );
-            }
-          );
-
-          // Prevent duplicate alerts
-          if (alreadyExists) {
-            return previousAlerts;
-          }
-
-          // Add new real-time alert at the beginning
-          return [realtimeAlert, ...previousAlerts];
-        });
-
-        console.log(
-          "Patient-specific real-time alert added:",
-          realtimeAlert
-        );
-      } catch (err) {
+      if (!token) {
         console.error(
-          "Error processing SSE notification:",
-          err
+          "No JWT token found for SSE connection."
         );
+
+        setSseConnected(false);
+        return;
       }
-    };
 
-    eventSource.addEventListener(
-      "doctor-notification",
-      handleDoctorNotification
-    );
-
-    eventSource.onopen = () => {
-      console.log("SSE connection established");
-
-      setSseConnected(true);
-    };
-
-    eventSource.onerror = () => {
-      console.error("SSE connection error");
-
-      setSseConnected(false);
-    };
-
-    return () => {
-      eventSource.removeEventListener(
-        "doctor-notification",
-        handleDoctorNotification
+      console.log(
+        "Connecting to authenticated SSE stream..."
       );
 
-      eventSource.close();
+      const response = await fetch(SSE_URL, {
+        method: "GET",
 
-      setSseConnected(false);
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "text/event-stream",
+        },
 
-      console.log("SSE connection closed");
-    };
-  }, [selectedPatientId]);
+        cache: "no-store",
+      });
+
+      console.log(
+        "SSE HTTP status:",
+        response.status
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `SSE connection failed: ${response.status}`
+        );
+      }
+
+      if (!response.body) {
+        throw new Error(
+          "SSE response body is not available."
+        );
+      }
+
+      console.log(
+        "Authenticated SSE connection established."
+      );
+
+      if (isActive) {
+        setSseConnected(true);
+      }
+
+      reader = response.body.getReader();
+
+      const decoder = new TextDecoder("utf-8");
+
+      let buffer = "";
+
+      while (isActive) {
+        const { value, done } = await reader.read();
+
+        if (done) {
+          break;
+        }
+
+        if (!value) {
+          continue;
+        }
+
+        buffer += decoder.decode(value, {
+          stream: true,
+        });
+
+        // Normalize line endings
+        buffer = buffer.replace(/\r\n/g, "\n");
+
+        // SSE events are separated by a blank line
+        const events = buffer.split("\n\n");
+
+        buffer = events.pop() || "";
+
+        for (const eventBlock of events) {
+          if (!eventBlock.trim()) {
+            continue;
+          }
+
+          let eventType = "message";
+
+          const dataLines = [];
+
+          const lines = eventBlock.split("\n");
+
+          for (const line of lines) {
+            // Ignore SSE comments / keep-alive
+            if (line.startsWith(":")) {
+              continue;
+            }
+
+            if (line.startsWith("event:")) {
+              eventType = line
+                .substring(6)
+                .trim();
+
+              continue;
+            }
+
+            if (line.startsWith("data:")) {
+              dataLines.push(
+                line.substring(5).trim()
+              );
+            }
+          }
+
+          const eventData = dataLines.join("\n");
+
+          console.log("SSE event received:", {
+            eventType,
+            eventData,
+          });
+
+          // Only process doctor notifications
+          if (
+            eventType !== "doctor-notification" ||
+            !eventData
+          ) {
+            continue;
+          }
+
+          try {
+            const notification =
+              JSON.parse(eventData);
+
+            console.log(
+              "Doctor notification received through SSE:",
+              notification
+            );
+
+            // Only display notification for
+            // currently selected patient
+            if (
+              String(notification.patientId) !==
+              String(selectedPatientId)
+            ) {
+              console.log(
+                "Ignoring notification for another patient:",
+                notification.patientId
+              );
+
+              continue;
+            }
+
+            const realtimeAlert = {
+              id:
+                notification.alertId ||
+                notification.notificationId,
+
+              alertId:
+                notification.alertId,
+
+              notificationId:
+                notification.notificationId,
+
+              patientId:
+                notification.patientId,
+
+              vitalType:
+                notification.vitalType,
+
+              measuredValue:
+                notification.measuredValue,
+
+              unit:
+                notification.unit,
+
+              severity:
+                notification.severity,
+
+              message:
+                notification.message,
+
+              recordedAt:
+                notification.recordedAt,
+
+              createdAt:
+                notification.createdAt,
+
+              status:
+                notification.status || "OPEN",
+            };
+
+            setAlerts((previousAlerts) => {
+              const notificationId =
+                realtimeAlert.notificationId;
+
+              const alertId =
+                realtimeAlert.alertId;
+
+              const alreadyExists =
+                previousAlerts.some((alert) => {
+                  const sameAlertId =
+                    alertId &&
+                    (
+                      alert.alertId === alertId ||
+                      alert.id === alertId
+                    );
+
+                  const sameNotificationId =
+                    notificationId &&
+                    alert.notificationId ===
+                      notificationId;
+
+                  return (
+                    sameAlertId ||
+                    sameNotificationId
+                  );
+                });
+
+              // Prevent duplicate alerts
+              if (alreadyExists) {
+                console.log(
+                  "Duplicate SSE notification ignored."
+                );
+
+                return previousAlerts;
+              }
+
+              return [
+                realtimeAlert,
+                ...previousAlerts,
+              ];
+            });
+
+            console.log(
+              "Patient-specific real-time alert added:",
+              realtimeAlert
+            );
+          } catch (error) {
+            console.error(
+              "Error processing SSE notification:",
+              error
+            );
+          }
+        }
+      }
+
+      if (isActive) {
+        setSseConnected(false);
+      }
+    } catch (error) {
+      console.error(
+        "SSE connection error:",
+        error
+      );
+
+      if (isActive) {
+        setSseConnected(false);
+      }
+    }
+  };
+
+  connectToSSE();
+
+  return () => {
+    isActive = false;
+
+    if (reader) {
+      reader.cancel().catch(() => {});
+    }
+
+    setSseConnected(false);
+
+    console.log(
+      "Authenticated SSE connection closed."
+    );
+  };
+}, [selectedPatientId]);
 
   // ==========================================
   // LATEST VITAL

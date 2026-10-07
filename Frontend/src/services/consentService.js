@@ -1,14 +1,27 @@
 const BASE_URL = "http://localhost:8080/api/consents";
 
+// Add JWT token to authenticated requests
+const getAuthHeaders = (includeContentType = false) => {
+  const token = localStorage.getItem("token");
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  if (includeContentType) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  return headers;
+};
+
 /**
  * Grant a new consent for a patient.
  */
 export const grantConsent = async (consent) => {
   const response = await fetch(BASE_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: getAuthHeaders(true),
     body: JSON.stringify(consent),
   });
 
@@ -36,11 +49,27 @@ export const grantConsent = async (consent) => {
  */
 export const getPatientConsents = async (patientId) => {
   const response = await fetch(
-    `${BASE_URL}/patient/${encodeURIComponent(patientId)}`
+    `${BASE_URL}/patient/${encodeURIComponent(patientId)}`,
+    {
+      method: "GET",
+      headers: getAuthHeaders(),
+    }
   );
 
   if (!response.ok) {
-    throw new Error("Failed to fetch patient consents");
+    let errorMessage = "Failed to fetch patient consents";
+
+    try {
+      const errorText = await response.text();
+
+      if (errorText) {
+        errorMessage = errorText;
+      }
+    } catch {
+      // Keep default error message
+    }
+
+    throw new Error(errorMessage);
   }
 
   return response.json();
@@ -54,11 +83,24 @@ export const revokeConsent = async (consentId) => {
     `${BASE_URL}/${encodeURIComponent(consentId)}/revoke`,
     {
       method: "PUT",
+      headers: getAuthHeaders(),
     }
   );
 
   if (!response.ok) {
-    throw new Error("Failed to revoke consent");
+    let errorMessage = "Failed to revoke consent";
+
+    try {
+      const errorText = await response.text();
+
+      if (errorText) {
+        errorMessage = errorText;
+      }
+    } catch {
+      // Keep default error message
+    }
+
+    throw new Error(errorMessage);
   }
 
   return response.json();
@@ -78,11 +120,27 @@ export const checkConsent = async (
   });
 
   const response = await fetch(
-    `${BASE_URL}/check?${params.toString()}`
+    `${BASE_URL}/check?${params.toString()}`,
+    {
+      method: "GET",
+      headers: getAuthHeaders(),
+    }
   );
 
   if (!response.ok) {
-    throw new Error("Failed to check consent");
+    let errorMessage = "Failed to check consent";
+
+    try {
+      const errorText = await response.text();
+
+      if (errorText) {
+        errorMessage = errorText;
+      }
+    } catch {
+      // Keep default error message
+    }
+
+    throw new Error(errorMessage);
   }
 
   return response.json();

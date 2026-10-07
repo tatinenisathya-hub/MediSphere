@@ -1,17 +1,50 @@
-const API_BASE_URL = "http://localhost:8080/api/laboratory";
+const API_BASE_URL =
+  "http://localhost:8080/api/laboratory";
+
+// Add JWT token to authenticated requests
+const getAuthHeaders = (
+  includeContentType = false
+) => {
+  const token =
+    localStorage.getItem("token");
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  if (includeContentType) {
+    headers["Content-Type"] =
+      "application/json";
+  }
+
+  return headers;
+};
 
 async function handleResponse(response) {
-  const contentType = response.headers.get("content-type") || "";
+  const contentType =
+    response.headers.get("content-type") || "";
 
   if (!response.ok) {
-    let message = `Request failed with status ${response.status}`;
+    let message =
+      `Request failed with status ${response.status}`;
 
     try {
-      if (contentType.includes("application/json")) {
-        const error = await response.json();
-        message = error.message || error.error || message;
+      if (
+        contentType.includes(
+          "application/json"
+        )
+      ) {
+        const error =
+          await response.json();
+
+        message =
+          error.message ||
+          error.error ||
+          message;
       } else {
-        const text = await response.text();
+        const text =
+          await response.text();
+
         if (text) {
           message = text;
         }
@@ -30,47 +63,60 @@ async function handleResponse(response) {
   return response.json();
 }
 
+// Get all laboratory results
 export async function getAllLabResults() {
-  const response = await fetch(API_BASE_URL);
-  return handleResponse(response);
-}
-
-export async function getLabResultsByPatient(patientId) {
   const response = await fetch(
-    `${API_BASE_URL}/patient/${encodeURIComponent(patientId)}`
+    API_BASE_URL,
+    {
+      method: "GET",
+      headers: getAuthHeaders(),
+    }
   );
 
   return handleResponse(response);
 }
 
-export async function getLabResultById(id) {
+// Get laboratory results by patient
+export async function getLabResultsByPatient(
+  patientId
+) {
   const response = await fetch(
-    `${API_BASE_URL}/${encodeURIComponent(id)}`
+    `${API_BASE_URL}/patient/${encodeURIComponent(
+      patientId
+    )}`,
+    {
+      method: "GET",
+      headers: getAuthHeaders(),
+    }
   );
 
   return handleResponse(response);
 }
 
-export async function createLabResult(labResult) {
-  const response = await fetch(API_BASE_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(labResult),
-  });
-
-  return handleResponse(response);
-}
-
-export async function updateLabResult(id, labResult) {
+// Get laboratory result by ID
+export async function getLabResultById(
+  id
+) {
   const response = await fetch(
     `${API_BASE_URL}/${encodeURIComponent(id)}`,
     {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      method: "GET",
+      headers: getAuthHeaders(),
+    }
+  );
+
+  return handleResponse(response);
+}
+
+// Create laboratory result
+export async function createLabResult(
+  labResult
+) {
+  const response = await fetch(
+    API_BASE_URL,
+    {
+      method: "POST",
+      headers: getAuthHeaders(true),
       body: JSON.stringify(labResult),
     }
   );
@@ -78,11 +124,36 @@ export async function updateLabResult(id, labResult) {
   return handleResponse(response);
 }
 
-export async function deleteLabResult(id) {
+// Update laboratory result
+export async function updateLabResult(
+  id,
+  labResult
+) {
   const response = await fetch(
-    `${API_BASE_URL}/${encodeURIComponent(id)}`,
+    `${API_BASE_URL}/${encodeURIComponent(
+      id
+    )}`,
+    {
+      method: "PUT",
+      headers: getAuthHeaders(true),
+      body: JSON.stringify(labResult),
+    }
+  );
+
+  return handleResponse(response);
+}
+
+// Delete laboratory result
+export async function deleteLabResult(
+  id
+) {
+  const response = await fetch(
+    `${API_BASE_URL}/${encodeURIComponent(
+      id
+    )}`,
     {
       method: "DELETE",
+      headers: getAuthHeaders(),
     }
   );
 

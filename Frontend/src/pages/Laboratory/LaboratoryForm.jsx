@@ -3,8 +3,7 @@ import {
   createLabResult,
   updateLabResult,
 } from "../../services/laboratoryService";
-
-const PATIENT_API_URL = "http://localhost:8080/api/patients";
+import { getPatients } from "../../services/patientService";
 
 const emptyForm = {
   patientId: "",
@@ -17,10 +16,17 @@ const emptyForm = {
   performedAt: "",
 };
 
-function LaboratoryForm({ editingResult, onSaved, onCancel }) {
+function LaboratoryForm({
+  editingResult,
+  onSaved,
+  onCancel,
+}) {
   const [patients, setPatients] = useState([]);
   const [form, setForm] = useState(emptyForm);
-  const [loadingPatients, setLoadingPatients] = useState(true);
+
+  const [loadingPatients, setLoadingPatients] =
+    useState(true);
+
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -31,20 +37,34 @@ function LaboratoryForm({ editingResult, onSaved, onCancel }) {
   useEffect(() => {
     if (editingResult) {
       setForm({
-        patientId: editingResult.patientId || "",
-        testName: editingResult.testName || "",
-        testCode: editingResult.testCode || "",
+        patientId:
+          editingResult.patientId || "",
+
+        testName:
+          editingResult.testName || "",
+
+        testCode:
+          editingResult.testCode || "",
+
         value:
           editingResult.value !== null &&
           editingResult.value !== undefined
             ? String(editingResult.value)
             : "",
-        unit: editingResult.unit || "",
-        referenceRange: editingResult.referenceRange || "",
-        status: editingResult.status || "FINAL",
-        performedAt: editingResult.performedAt
-          ? editingResult.performedAt.substring(0, 16)
-          : "",
+
+        unit:
+          editingResult.unit || "",
+
+        referenceRange:
+          editingResult.referenceRange || "",
+
+        status:
+          editingResult.status || "FINAL",
+
+        performedAt:
+          editingResult.performedAt
+            ? editingResult.performedAt.substring(0, 16)
+            : "",
       });
     } else {
       setForm(emptyForm);
@@ -55,16 +75,21 @@ function LaboratoryForm({ editingResult, onSaved, onCancel }) {
 
   async function loadPatients() {
     try {
-      const response = await fetch(PATIENT_API_URL);
+      setLoadingPatients(true);
+      setError("");
 
-      if (!response.ok) {
-        throw new Error("Unable to load patients");
-      }
+      const data = await getPatients();
 
-      const data = await response.json();
-      setPatients(Array.isArray(data) ? data : []);
+      setPatients(
+        Array.isArray(data)
+          ? data
+          : []
+      );
     } catch (err) {
-      setError(err.message || "Unable to load patients");
+      setError(
+        err.message ||
+          "Unable to load patients"
+      );
     } finally {
       setLoadingPatients(false);
     }
@@ -100,14 +125,18 @@ function LaboratoryForm({ editingResult, onSaved, onCancel }) {
     }
 
     if (!form.performedAt) {
-      setError("Performed date and time are required.");
+      setError(
+        "Performed date and time are required."
+      );
       return;
     }
 
     const numericValue = Number(form.value);
 
     if (Number.isNaN(numericValue)) {
-      setError("Test value must be a valid number.");
+      setError(
+        "Test value must be a valid number."
+      );
       return;
     }
 
@@ -117,7 +146,8 @@ function LaboratoryForm({ editingResult, onSaved, onCancel }) {
       testCode: form.testCode.trim(),
       value: numericValue,
       unit: form.unit.trim(),
-      referenceRange: form.referenceRange.trim(),
+      referenceRange:
+        form.referenceRange.trim(),
       status: form.status,
       performedAt: form.performedAt,
     };
@@ -126,15 +156,22 @@ function LaboratoryForm({ editingResult, onSaved, onCancel }) {
       setSaving(true);
 
       if (editingResult) {
-        await updateLabResult(editingResult.id, payload);
+        await updateLabResult(
+          editingResult.id,
+          payload
+        );
       } else {
         await createLabResult(payload);
       }
 
       setForm(emptyForm);
+
       onSaved();
     } catch (err) {
-      setError(err.message || "Unable to save laboratory result.");
+      setError(
+        err.message ||
+          "Unable to save laboratory result."
+      );
     } finally {
       setSaving(false);
     }
@@ -151,8 +188,8 @@ function LaboratoryForm({ editingResult, onSaved, onCancel }) {
           </h2>
 
           <p>
-            Store a laboratory measurement for an existing MediSphere
-            patient.
+            Store a laboratory measurement for
+            an existing MediSphere patient.
           </p>
         </div>
       </div>
@@ -163,17 +200,25 @@ function LaboratoryForm({ editingResult, onSaved, onCancel }) {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="laboratory-form">
+      <form
+        onSubmit={handleSubmit}
+        className="laboratory-form"
+      >
         <div className="laboratory-form-grid">
           <div className="form-group">
-            <label htmlFor="patientId">Patient *</label>
+            <label htmlFor="patientId">
+              Patient *
+            </label>
 
             <select
               id="patientId"
               name="patientId"
               value={form.patientId}
               onChange={handleChange}
-              disabled={loadingPatients || saving}
+              disabled={
+                loadingPatients ||
+                saving
+              }
             >
               <option value="">
                 {loadingPatients
@@ -182,7 +227,10 @@ function LaboratoryForm({ editingResult, onSaved, onCancel }) {
               </option>
 
               {patients.map((patient) => (
-                <option key={patient.id} value={patient.id}>
+                <option
+                  key={patient.id}
+                  value={patient.id}
+                >
                   {patient.name} — {patient.id}
                 </option>
               ))}
@@ -190,7 +238,9 @@ function LaboratoryForm({ editingResult, onSaved, onCancel }) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="testName">Test Name *</label>
+            <label htmlFor="testName">
+              Test Name *
+            </label>
 
             <input
               id="testName"
@@ -204,7 +254,9 @@ function LaboratoryForm({ editingResult, onSaved, onCancel }) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="testCode">Test Code</label>
+            <label htmlFor="testCode">
+              Test Code
+            </label>
 
             <input
               id="testCode"
@@ -218,7 +270,9 @@ function LaboratoryForm({ editingResult, onSaved, onCancel }) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="value">Value *</label>
+            <label htmlFor="value">
+              Value *
+            </label>
 
             <input
               id="value"
@@ -233,7 +287,9 @@ function LaboratoryForm({ editingResult, onSaved, onCancel }) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="unit">Unit</label>
+            <label htmlFor="unit">
+              Unit
+            </label>
 
             <input
               id="unit"
@@ -263,7 +319,9 @@ function LaboratoryForm({ editingResult, onSaved, onCancel }) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="status">Status</label>
+            <label htmlFor="status">
+              Status
+            </label>
 
             <select
               id="status"
@@ -272,10 +330,21 @@ function LaboratoryForm({ editingResult, onSaved, onCancel }) {
               onChange={handleChange}
               disabled={saving}
             >
-              <option value="FINAL">Final</option>
-              <option value="PRELIMINARY">Preliminary</option>
-              <option value="CORRECTED">Corrected</option>
-              <option value="CANCELLED">Cancelled</option>
+              <option value="FINAL">
+                Final
+              </option>
+
+              <option value="PRELIMINARY">
+                Preliminary
+              </option>
+
+              <option value="CORRECTED">
+                Corrected
+              </option>
+
+              <option value="CANCELLED">
+                Cancelled
+              </option>
             </select>
           </div>
 
@@ -310,7 +379,10 @@ function LaboratoryForm({ editingResult, onSaved, onCancel }) {
           <button
             type="submit"
             className="primary-button"
-            disabled={saving || loadingPatients}
+            disabled={
+              saving ||
+              loadingPatients
+            }
           >
             {saving
               ? "Saving..."
